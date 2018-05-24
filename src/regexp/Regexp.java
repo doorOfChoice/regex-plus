@@ -24,53 +24,55 @@ public class Regexp {
      * @return
      */
     public boolean match(String str) {
-        Pair pair = new Pair(pattern, str);
-        while (pair.v1NotEnd()) {
-            if (!handle(pair))
+        Meta mp = new Meta(pattern);
+        Meta ms = new Meta(str);
+        while (mp.notEnd()) {
+            if (!handle(mp, ms))
                 return false;
         }
         return true;
     }
 
-
-    private boolean handle(Pair pair) {
-        char ch = pattern.charAt(pair.v1());
+    /**
+     *
+     * @param mp 正规式的元数据
+     * @param ms 字符串的元数据
+     * @return
+     */
+    private boolean handle(Meta mp, Meta ms) {
+        char ch = mp.cur();
         //匹配开头
         if (ch == '^') {
-            pair.incrV1();
+            mp.incr();
             return true;
-        //匹配结尾
         } else if (ch == '$') {
-            pair.incrV1();
-            return !pair.v2NotEnd();
-        //匹配*
-        } else if (pair.v1Ok() && pair.v1Next() == '*') {
-            return handleStar(pair);
-        //匹配+
+            mp.incr();
+            return !ms.notEnd();
+        } else if (mp.ok() && mp.next() == '*') {
+            return handleStar(mp, ms);
         } else if (ch == '+') {
-            return handlePlus(pair);
-        //匹配.和普通字符
-        } else if (ch == '.' || (pair.v2NotEnd() && ch == pair.v2Cur())) {
-            pair.incrBoth();
+            return handlePlus(mp, ms);
+        } else if (ch == '.' || (ms.notEnd() && ch == ms.cur())) {
+            mp.incr();
+            ms.incr();
             return true;
         }
         return false;
     }
 
-    private boolean handlePlus(Pair pair) {
+    private boolean handlePlus(Meta mp, Meta ms) {
         //单独的+号没有任何意义，直接判断为错误
-        if (pair.v1Zero()) return false;
-        char ch1 = pair.v1Pre();
-        while (ch1 == '.' || (pair.v2NotEnd() && ch1 == pair.s2(pair.v1()))) pair.incrV2();
-        pair.incrV1();
+        if (mp.zero()) return false;
+        char ch1 = mp.pre();
+        while (ch1 == '.' || (ms.notEnd() && ch1 == ms.cur())) ms.incr();
+        mp.incr();
         return true;
     }
 
-    private boolean handleStar(Pair pair) {
-        //单独的+号没有任何意义，直接判断为错误
-        char ch1 = pair.v1CurAndIncr();
-        while (ch1 == '.' || (pair.v2NotEnd() && ch1 == pair.s2(pair.v2()))) pair.incrV2();
-        pair.incrV1();
+    private boolean handleStar(Meta mp, Meta ms) {
+        char ch1 = mp.incr();
+        while (ch1 == '.' || (ms.notEnd() && ch1 == ms.cur())) ms.incr();
+        mp.incr();
         return true;
     }
 }
