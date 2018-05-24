@@ -1,20 +1,15 @@
 package regexp;
 
-class Meta implements Cloneable {
+/**
+ * 普通字符串的元数据库
+ */
+public class MetaCommon {
     private String s;
     //字符串s1的下标
     private int i = 0;
 
-    public Meta(String s) {
+    public MetaCommon(String s) {
         this.s = s;
-    }
-
-    int i() {
-        return i;
-    }
-
-    void update(int i) {
-        this.i = i;
     }
 
     boolean ok() {
@@ -25,34 +20,34 @@ class Meta implements Cloneable {
         return i != s.length();
     }
 
-    public char incr() {
-        return s.charAt(i++);
+    public String incr() {
+        return s.charAt(i++) + "";
     }
 
-    public char incr(int x){
+    public String incr(int x) {
         char ch = s.charAt(i);
         i += x;
-        return ch;
+        return ch + "";
     }
 
-    char cur() {
-        return s.charAt(i);
+    String cur() {
+        return s.charAt(i) + "";
     }
 
-    char pre() {
-        return s.charAt(i - 1);
+    String pre() {
+        return s.charAt(i - 1) + "";
     }
 
-    char next() {
-        return s.charAt(i + 1);
-    }
-
-    boolean zero() {
-        return i == 0;
+    String next() {
+        return s.charAt(i + 1) + "";
     }
 
     char s(int x) {
         return s.charAt(x);
+    }
+
+    int i() {
+        return i;
     }
 
     public Object clone() {
