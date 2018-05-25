@@ -5,10 +5,10 @@ import java.util.Arrays;
 
 class CharUtil {
     private static ArrayList<Character> specials = new ArrayList<>(
-            Arrays.asList('s', 'S', 'w', 'W', 'd', 'D', '+', '*', '^', '$', '?', '\\')
+            Arrays.asList('s', 'S', 'w', 'W', 'd', 'D', '+', '{', '}', '[', ']', '*', '^', '$', '?', '\\')
     );
     private static ArrayList<Character> escaping = new ArrayList<>(
-            Arrays.asList('+', '*', '^', '?', '$', '\\')
+            Arrays.asList('+', '*', '^', '?', '$', '{', '}', '[', ']', '\\')
     );
 
     private CharUtil() {

@@ -26,16 +26,18 @@ public class TupleSolver extends AbstractSolver implements Tupler {
 
     @Override
     public boolean solve(MetaCommon ms) {
+        //是否有成功的Or语句
+        boolean ok = false;
         for (Solver solver : solvers) {
-            if (!solver.solve(ms)) {
-                return false;
-            }
-            if (solver instanceof Tupler) {
-                groups.addAll(((Tupler) solver).array());
+            if (solver.solve(ms)) {
+                ok = true;
+                if (solver instanceof Tupler)
+                    groups.addAll(((Tupler) solver).array());
+                groups.addFirst(ms.sDiToI());
+                break;
             }
         }
-        groups.addFirst(ms.sDiToI());
-        return true;
+        return ok;
     }
 
     @Override

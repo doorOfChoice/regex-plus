@@ -16,6 +16,10 @@ public class CountSolver extends AbstractSolver {
         return new CountSolver(solver, 1, -1);
     }
 
+    public static CountSolver produceQuestion(AbstractSolver solver) {
+        return new CountSolver(solver, 0, 1);
+    }
+
     public static CountSolver produceFixed(AbstractSolver solver, int count) {
         return new CountSolver(solver, -1, count);
     }
@@ -44,29 +48,26 @@ public class CountSolver extends AbstractSolver {
     @Override
     public boolean solve(MetaCommon ms) {
         boolean loop = false;
-            if (min == -1) {
-                for (int i = 0; i < max; ++i) {
-                    if (!solver.solve(ms))
-                        return false;
-                    ms.incr();
-                }
-            } else if (min > -1 && max != -1) {
-                int count = 0;
-                while (solver.solve(ms)) {
-                    ++count;
-                    ms.incr();
-                    if (count > max)
-                        return false;
-                }
-                return count >= min;
-            } else if (min > -1) {
-                int count = 0;
-                while (solver.solve(ms)) {
-                    ++count;
-                    ms.incr();
-                }
-                return count >= min;
+        if (min == -1) {
+            for (int i = 0; i < max; ++i) {
+                if (!solver.solve(ms))
+                    return false;
             }
+        } else if (min > -1 && max != -1) {
+            int count = 0;
+            while (solver.solve(ms)) {
+                ++count;
+                if (count > max)
+                    return false;
+            }
+            return count >= min;
+        } else if (min > -1) {
+            int count = 0;
+            while (solver.solve(ms)) {
+                ++count;
+            }
+            return count >= min;
+        }
         return true;
     }
 

@@ -48,6 +48,8 @@ public class Matcher {
             return CountSolver.produceStar(r.pop());
         } else if (mp.cur().equals("+")) {
             return CountSolver.producePlus(r.pop());
+        } else if (mp.cur().equals("?")) {
+            return CountSolver.produceQuestion(r.pop());
         } else if (mp.cur().equals("{")) {
             List<Integer> numbers = new ArrayList<>();
             StringBuilder buf = new StringBuilder();
