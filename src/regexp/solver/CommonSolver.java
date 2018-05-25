@@ -10,7 +10,8 @@ public class CommonSolver extends AbstractSolver {
     @Override
     public boolean solve(MetaCommon ms) {
         boolean result = ms.notEnd() && value.equals(ms.cur());
-        if (result) ms.incr();
+        if (result)
+            ms.incr();
         return result;
     }
 

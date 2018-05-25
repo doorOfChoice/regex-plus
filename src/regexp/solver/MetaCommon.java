@@ -26,6 +26,12 @@ class MetaCommon {
         return s.charAt(i++) + "";
     }
 
+    public String incrAndUpdate() {
+        String ch = incr();
+        update();
+        return ch;
+    }
+
     public String incr(int x) {
         char ch = s.charAt(i);
         i += x;
@@ -64,6 +70,9 @@ class MetaCommon {
         return di;
     }
 
+    public void di(int di) {
+        this.di = di;
+    }
 
     public void update() {
         this.di = i;

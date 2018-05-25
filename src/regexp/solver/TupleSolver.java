@@ -26,6 +26,11 @@ public class TupleSolver extends AbstractSolver implements Tupler {
 
     @Override
     public boolean solve(MetaCommon ms) {
+        //防止每次back都回到0位置，需要每次进入Tuple都更新一次di
+        //之前的备份值
+        int prevDi = ms.di();
+        //设置当前开始位置为备份值
+        ms.di(ms.i());
         //是否有成功的Or语句
         boolean ok = false;
         for (Solver solver : solvers) {
@@ -37,6 +42,8 @@ public class TupleSolver extends AbstractSolver implements Tupler {
                 break;
             }
         }
+        //恢复备份上下文
+        ms.di(prevDi);
         return ok;
     }
 
