@@ -1,14 +1,14 @@
-package regexp;
+package regexp.solver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 class CharUtil {
     private static ArrayList<Character> specials = new ArrayList<>(
-            Arrays.asList('s', 'S', 'w', 'W', 'd', 'D', '+', '*', '^', '$', '\\')
+            Arrays.asList('s', 'S', 'w', 'W', 'd', 'D', '+', '*', '^', '$', '?', '\\')
     );
-    private static ArrayList<Character> escapings = new ArrayList<>(
-            Arrays.asList('+', '*', '^', '$', '\\')
+    private static ArrayList<Character> escaping = new ArrayList<>(
+            Arrays.asList('+', '*', '^', '?', '$', '\\')
     );
 
     private CharUtil() {
@@ -24,6 +24,10 @@ class CharUtil {
         return Character.isDigit(ch) || Character.isLetter(ch) || ch == '_';
     }
 
+    static boolean isWhiteChar(char ch) {
+        return ch == '\n' || ch == '\t' || ch == ' ' || ch == '\b';
+    }
+
     /**
      * 判断是否是正则中的需要转义的字符
      *
@@ -31,7 +35,7 @@ class CharUtil {
      * @return
      */
     static boolean isEscaping(char ch) {
-        return escapings.contains(ch);
+        return escaping.contains(ch);
     }
 
     /**

@@ -1,4 +1,4 @@
-package regexp;
+package regexp.solver;
 
 /**
  * 正则字符串的元数据库
@@ -11,30 +11,30 @@ class MetaPattern implements Cloneable {
         this.s = s;
     }
 
-    boolean ok() {
+    public boolean ok() {
         if (isSpecial())
             return i + 2 < s.length();
         return i + 1 < s.length();
     }
 
-    boolean notEnd() {
+    public boolean notEnd() {
         return i < s.length();
     }
 
-    String incr() {
+    public String incr() {
         String r = cur();
         i = i + (isSpecial() ? 2 : 1);
         return r;
     }
 
-    String incr(int x) {
+    public String incr(int x) {
         String r = cur();
         for (int i = 0; i < x; ++i)
             incr();
         return r;
     }
 
-    String cur() {
+    public String cur() {
         String r;
         if (isSpecial())
             return special();
@@ -42,7 +42,7 @@ class MetaPattern implements Cloneable {
 
     }
 
-    String pre() {
+    public String pre() {
         String r;
         if (isSpecial(i - 2))
             r = s.substring(i - 2, i);
@@ -52,7 +52,7 @@ class MetaPattern implements Cloneable {
         return r;
     }
 
-    String next() {
+    public String next() {
         String r;
         if (isSpecial()) {
             if (isSpecial(i + 2))
@@ -60,12 +60,12 @@ class MetaPattern implements Cloneable {
             else
                 r = s.substring(i + 2, i + 3);
         } else
-            r = isSpecial(i + 1) ? s.substring(i + 1, i + 3) :  s.substring(i + 1, i + 2);
+            r = isSpecial(i + 1) ? s.substring(i + 1, i + 3) : s.substring(i + 1, i + 2);
         checkEscape(r);
         return r;
     }
 
-    String next(int x) {
+    public String next(int x) {
         int j = i;
         int count = 0;
         while (count < x) {
@@ -77,15 +77,15 @@ class MetaPattern implements Cloneable {
         return s.substring(j, j + 1);
     }
 
-    String special() {
+    public String special() {
         return s.substring(i, i + 2);
     }
 
-    boolean isZero() {
+    public boolean isZero() {
         return i == 0;
     }
 
-    boolean isSpecial() {
+    public boolean isSpecial() {
         boolean result = isSpecial(i);
         if (!result && s.substring(i, i + 1).equals("\\"))
             throw new IllegalArgumentException("After \\ u need offer a special character");

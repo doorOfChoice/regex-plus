@@ -1,22 +1,24 @@
-package regexp;
+package regexp.solver;
 
 /**
  * 普通字符串的元数据库
  */
-public class MetaCommon {
+class MetaCommon {
     private String s;
     //字符串s1的下标
     private int i = 0;
+    //备份下标
+    private int di = 0;
 
     public MetaCommon(String s) {
         this.s = s;
     }
 
-    boolean ok() {
+    public boolean ok() {
         return i + 1 < s.length();
     }
 
-    boolean notEnd() {
+    public boolean notEnd() {
         return i != s.length();
     }
 
@@ -30,24 +32,45 @@ public class MetaCommon {
         return ch + "";
     }
 
-    String cur() {
+    public String cur() {
         return s.charAt(i) + "";
     }
 
-    String pre() {
+    public String pre() {
         return s.charAt(i - 1) + "";
     }
 
-    String next() {
+    public String next() {
         return s.charAt(i + 1) + "";
     }
 
-    char s(int x) {
+    public char s(int x) {
         return s.charAt(x);
     }
 
-    int i() {
+    public String s(int l, int r) {
+        return s.substring(l, r);
+    }
+
+    public String sDiToI() {
+        return s(di, i);
+    }
+
+    public int i() {
         return i;
+    }
+
+    public int di() {
+        return di;
+    }
+
+
+    public void update() {
+        this.di = i;
+    }
+
+    public void back() {
+        this.i = di;
     }
 
     public Object clone() {
