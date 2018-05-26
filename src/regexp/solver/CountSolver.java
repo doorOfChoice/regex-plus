@@ -47,7 +47,6 @@ public class CountSolver extends AbstractSolver {
 
     @Override
     public boolean solve(MetaCommon ms) {
-        boolean loop = false;
         if (min == -1) {
             for (int i = 0; i < max; ++i) {
                 if (!solver.solve(ms))

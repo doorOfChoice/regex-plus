@@ -62,10 +62,6 @@ public class TupleSolver extends AbstractSolver implements Tupler {
         return solvers.get(solvers.size() - 1).peek();
     }
 
-    public void addOr() {
-        solvers.add(new OrSolver());
-    }
-
     @Override
     public List<String> array() {
         return groups;
@@ -74,5 +70,9 @@ public class TupleSolver extends AbstractSolver implements Tupler {
     @Override
     public String toString() {
         return solvers.toString();
+    }
+
+    public void addOr() {
+        solvers.add(new OrSolver());
     }
 }

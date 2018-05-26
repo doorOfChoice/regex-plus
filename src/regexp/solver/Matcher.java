@@ -30,6 +30,8 @@ public class Matcher {
                 r = r.getParent();
             } else if (mp.cur().equals("|")) {
                 r.addOr();
+            } else if (mp.cur().equals("[")) {
+                r.add(getSquareSolver(mp));
             } else if ((t = getCountSolver(mp, r)) != null) {
                 r.add(t);
             } else {
@@ -40,6 +42,58 @@ public class Matcher {
         root = r;
     }
 
+    /**
+     * 分析包含在[]中的Solver
+     *
+     * @param mp
+     * @return
+     */
+    private AbstractSolver getSquareSolver(MetaPattern mp) {
+        SquareSolver squareSolver = new SquareSolver();
+        boolean isRange = false;
+        String prev = null;
+        while (true) {
+            //因为是从[开始，所以判断下一个下标是否合法
+            if(!mp.ok())
+                throw new IllegalArgumentException("Cannot find close ]");
+            mp.incr();
+            String t = mp.cur();
+            if (t.equals("-")) {
+                isRange = true;
+            } else {
+                //前继节点不为空, 说明可以进行单个和范围判断
+                if (prev != null) {
+                    if (!isRange) {
+                        squareSolver.add(CharUtil.isSpecialString(t) ?
+                                new SpecialSolver(prev) : new CommonSolver(prev)
+                        );
+                        prev = t;
+                    } else {
+                        squareSolver.add(new RangeSolver(prev, t));
+                        prev = null;
+                        isRange = false;
+                    }
+                } else {
+                    prev = t;
+                }
+                //到末尾，跳出
+                if (t.equals("]")) {
+                    break;
+                }
+            }
+        }
+        if (squareSolver.size() == 0)
+            throw new IllegalArgumentException("U need pass some args into []");
+        return squareSolver;
+    }
+
+    /**
+     * 分析出{0,n},*,+,?的数量匹配
+     *
+     * @param mp
+     * @param r
+     * @return
+     */
     private AbstractSolver getCountSolver(MetaPattern mp, TupleSolver r) {
         AbstractSolver prev = r.peek();
         if (prev == null)
@@ -82,6 +136,12 @@ public class Matcher {
         return null;
     }
 
+    /**
+     * 简单的单个字符匹配
+     *
+     * @param s
+     * @return
+     */
     private AbstractSolver getSimpleSolver(String s) {
         if (s.equals("^")) {
             return new BeginSolver();

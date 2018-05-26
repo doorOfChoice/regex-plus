@@ -35,4 +35,8 @@ public abstract class AbstractSolver implements Solver {
         throw new UnsupportedOperationException("This Solver is not contain add method");
     }
 
+    public int size() {
+        throw new UnsupportedOperationException("This Solver is not contain add method");
+    }
+
 }
