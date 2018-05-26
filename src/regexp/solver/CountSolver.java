@@ -6,30 +6,27 @@ public class CountSolver extends AbstractSolver {
     private int min = -1;
     //max为-1表示无匹配上限
     private int max = -1;
+
     private boolean greedy = false;
 
-    public static CountSolver produceStar(AbstractSolver solver) {
+    static CountSolver produceStar(AbstractSolver solver) {
         return new CountSolver(solver, 0, -1);
     }
 
-    public static CountSolver producePlus(AbstractSolver solver) {
+    static CountSolver producePlus(AbstractSolver solver) {
         return new CountSolver(solver, 1, -1);
     }
 
-    public static CountSolver produceQuestion(AbstractSolver solver) {
+    static CountSolver produceQuestion(AbstractSolver solver) {
         return new CountSolver(solver, 0, 1);
     }
 
-    public static CountSolver produceFixed(AbstractSolver solver, int count) {
+    static CountSolver produceFixed(AbstractSolver solver, int count) {
         return new CountSolver(solver, -1, count);
     }
 
-    public static CountSolver produce(AbstractSolver solver, int min, int max) {
+    static CountSolver produce(AbstractSolver solver, int min, int max) {
         return new CountSolver(solver, min, max);
-    }
-
-    private CountSolver(AbstractSolver solver, int min, int max) {
-        this(null, solver, min, max);
     }
 
     /**
@@ -39,15 +36,18 @@ public class CountSolver extends AbstractSolver {
      * @param min
      * @param max
      */
-    private CountSolver(AbstractSolver parent, AbstractSolver solver, int min, int max) {
-        super(parent);
+    private CountSolver(AbstractSolver solver, int min, int max) {
         this.solver = solver;
         this.min = min;
         this.max = max;
     }
 
-    public void setGreedy(boolean greedy) {
+    void setGreedy(boolean greedy) {
         this.greedy = greedy;
+    }
+
+    boolean isGreedy() {
+        return greedy;
     }
 
     @Override

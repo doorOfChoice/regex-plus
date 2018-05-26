@@ -4,17 +4,9 @@ package regexp.solver;
  * AbstractSolver提供抽象的方法供Solver的具体实现使用
  */
 public abstract class AbstractSolver implements Solver {
-    protected AbstractSolver parent;
-
+    protected AbstractSolver prev;
+    protected AbstractSolver next;
     public AbstractSolver() {
-    }
-
-    public AbstractSolver(AbstractSolver parent) {
-        this.parent = parent;
-    }
-
-    public void setParent(AbstractSolver parent) {
-        this.parent = parent;
     }
 
     public boolean isSpecial() {

@@ -9,13 +9,7 @@ public class TupleSolver extends AbstractSolver implements Tupler {
     private LinkedList<String> groups;
     private TupleSolver parent;
 
-
     public TupleSolver() {
-        this(null);
-    }
-
-    public TupleSolver(AbstractSolver parent) {
-        super(parent);
         this.solvers = new ArrayList<>();
         this.groups = new LinkedList<>();
         addOr();

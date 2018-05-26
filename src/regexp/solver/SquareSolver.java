@@ -14,10 +14,6 @@ public class SquareSolver extends AbstractSolver {
     public SquareSolver() {
     }
 
-    public SquareSolver(AbstractSolver parent) {
-        super(parent);
-    }
-
     public void setNot(boolean not) {
         this.not = not;
     }

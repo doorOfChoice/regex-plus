@@ -9,11 +9,6 @@ public class RangeSolver extends AbstractSolver {
     private String max;
 
     public RangeSolver(String min, String max) {
-        this(null, min, max);
-    }
-
-    public RangeSolver(AbstractSolver parent, String min, String max) {
-        super(parent);
         this.min = min;
         this.max = max;
     }

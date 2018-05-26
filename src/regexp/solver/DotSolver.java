@@ -1,10 +1,10 @@
 package regexp.solver;
 
 public class DotSolver extends AbstractSolver {
-    public DotSolver(){}
-    public DotSolver(AbstractSolver parent){
-        this.parent = parent;
+    public DotSolver() {
     }
+
+
     @Override
     public boolean solve(MetaCommon ms) {
         boolean result = ms.notEnd();

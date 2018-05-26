@@ -9,12 +9,12 @@ public class OrSolver extends AbstractSolver {
     public OrSolver() {
     }
 
-    public OrSolver(AbstractSolver parent) {
-        super(parent);
-    }
 
     @Override
     public void add(AbstractSolver solver) {
+        AbstractSolver prevNode = peek();
+        if (prevNode != null) prevNode.next = solver;
+        solver.prev = prevNode;
         solvers.add(solver);
     }
 
@@ -23,7 +23,10 @@ public class OrSolver extends AbstractSolver {
         int index = solvers.size() - 1;
         if (index < 0)
             return null;
-        return solvers.remove(index);
+        AbstractSolver removeNode = solvers.remove(index);
+        if (removeNode.prev != null)
+            removeNode.prev.next = null;
+        return removeNode;
     }
 
     @Override
@@ -36,11 +39,12 @@ public class OrSolver extends AbstractSolver {
 
     @Override
     public boolean solve(MetaCommon ms) {
-        for (AbstractSolver solver : solvers) {
+        for (int i = 0; i < solvers.size(); ++i) {
+            AbstractSolver solver = solvers.get(i);
             if (!solver.solve(ms)) {
                 //之前进行过贪婪操作并且回溯找到相应值
-                if (solver.parent != null
-                        && solver.parent.isCount()
+                if (solver.prev != null
+                        && solver.prev.isCount()
                         && ms.isGreedy()
                         && track(solver, ms)) {
                     continue;

@@ -22,7 +22,7 @@ public class Matcher {
         AbstractSolver t;
         while (mp.notEnd()) {
             if (mp.cur().equals("(")) {
-                TupleSolver next = new TupleSolver(r.peek());
+                TupleSolver next = new TupleSolver();
                 next.setParent(r);
                 r.add(next);
                 r = next;
@@ -31,16 +31,11 @@ public class Matcher {
             } else if (mp.cur().equals("|")) {
                 r.addOr();
             } else if (mp.cur().equals("[")) {
-                AbstractSolver solver = getSquareSolver(mp);
-                solver.setParent(r.peek());
-                r.add(solver);
+                r.add(getSquareSolver(mp));
             } else if ((t = getCountSolver(mp, r)) != null) {
-                t.setParent(r.peek());
                 r.add(t);
             } else {
-                AbstractSolver solver = getSimpleSolver(mp.cur());
-                solver.setParent(r.peek());
-                r.add(solver);
+                r.add(getSimpleSolver(mp.cur()));
             }
             mp.incr();
         }
@@ -104,15 +99,20 @@ public class Matcher {
      */
     private AbstractSolver getCountSolver(MetaPattern mp, TupleSolver r) {
         AbstractSolver prev = r.peek();
+        String cur = mp.cur();
         if (prev == null)
             return null;
-        if (mp.cur().equals("*")) {
+        if (cur.equals("*")) {
             return CountSolver.produceStar(r.pop());
-        } else if (mp.cur().equals("+")) {
+        } else if (cur.equals("+")) {
             return CountSolver.producePlus(r.pop());
-        } else if (mp.cur().equals("?")) {
+        } else if (cur.equals("?")) {
+            if (prev.isCount()) {
+                ((CountSolver) prev).setGreedy(true);
+                return r.pop();
+            }
             return CountSolver.produceQuestion(r.pop());
-        } else if (mp.cur().equals("{")) {
+        } else if (cur.equals("{")) {
             List<Integer> numbers = new ArrayList<>();
             StringBuilder buf = new StringBuilder();
             boolean isEndless = false;
@@ -121,17 +121,20 @@ public class Matcher {
                 char ch = mp.cur().charAt(0);
                 if (ch == '}' || ch == ',') {
                     //逗号说明可能是无上界匹配
-                    if (ch == ',') isEndless = true;
+                    if (ch == ',')
+                        isEndless = true;
+                    //缓冲中没有数字则不加入,比如{1,}
                     if (buf.length() != 0)
                         numbers.add(new Integer(buf.toString()));
                     buf = new StringBuilder();
                     if (numbers.size() > 2)
-                        throw new IllegalArgumentException("Please input a right count");
+                        throw new IllegalArgumentException("Please input a right count < 2");
                 }
                 if (ch == ',')
                     continue;
                 if (ch == '}')
                     break;
+                //判断{}中的字符是否是数字
                 if (!Character.isDigit(ch)) {
                     throw new IllegalArgumentException("Please input a right count");
                 }
@@ -142,7 +145,6 @@ public class Matcher {
             if (numbers.size() == 0) {
                 throw new IllegalArgumentException("Please input a right count");
             } else if (numbers.size() == 1) {
-
                 return isEndless ? CountSolver.produce(r.pop(), numbers.get(0), -1) :
                         CountSolver.produceFixed(r.pop(), numbers.get(0));
             }
