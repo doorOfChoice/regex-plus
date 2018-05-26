@@ -7,7 +7,7 @@ public class Main {
 
     public static void main(String[] args) {
         long t1 = System.currentTimeMillis();
-        System.out.println(Regex.match("a[bc]|b[ce]", "bc"));
+        System.out.println(Regex.match("^1{3,}$", "11111111"));
 //        System.out.println(Pattern.matches("^[abc]e$", "be"));
 //        Pattern p = Pattern.compile("[(a)]");
 //        Matcher m = p.matcher("a");

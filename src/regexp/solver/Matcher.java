@@ -54,12 +54,15 @@ public class Matcher {
         String prev = null;
         while (true) {
             //因为是从[开始，所以判断下一个下标是否合法
-            if(!mp.ok())
+            if (!mp.ok())
                 throw new IllegalArgumentException("Cannot find close ]");
             mp.incr();
             String t = mp.cur();
+
             if (t.equals("-")) {
                 isRange = true;
+            } else if (t.equals("^")) {
+                squareSolver.setNot(true);
             } else {
                 //前继节点不为空, 说明可以进行单个和范围判断
                 if (prev != null) {
@@ -107,11 +110,15 @@ public class Matcher {
         } else if (mp.cur().equals("{")) {
             List<Integer> numbers = new ArrayList<>();
             StringBuilder buf = new StringBuilder();
+            boolean isEndless = false;
             do {
                 mp.incr();
                 char ch = mp.cur().charAt(0);
                 if (ch == '}' || ch == ',') {
-                    numbers.add(new Integer(buf.toString()));
+                    //逗号说明可能是无上界匹配
+                    if (ch == ',') isEndless = true;
+                    if (buf.length() != 0)
+                        numbers.add(new Integer(buf.toString()));
                     buf = new StringBuilder();
                     if (numbers.size() > 2)
                         throw new IllegalArgumentException("Please input a right count");
@@ -123,12 +130,16 @@ public class Matcher {
                 if (!Character.isDigit(ch)) {
                     throw new IllegalArgumentException("Please input a right count");
                 }
+                //如果有第二个数字说明不是无上界匹配
+                isEndless = false;
                 buf.append(ch);
             } while (mp.notEnd());
             if (numbers.size() == 0) {
                 throw new IllegalArgumentException("Please input a right count");
             } else if (numbers.size() == 1) {
-                return CountSolver.produceFixed(r.pop(), numbers.get(0));
+
+                return isEndless ? CountSolver.produce(r.pop(), numbers.get(0), -1) :
+                        CountSolver.produceFixed(r.pop(), numbers.get(0));
             }
             return CountSolver.produce(r.pop(), numbers.get(0), numbers.get(1));
         }
