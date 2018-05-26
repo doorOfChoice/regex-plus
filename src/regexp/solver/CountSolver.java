@@ -28,6 +28,10 @@ public class CountSolver extends AbstractSolver {
         return new CountSolver(solver, min, max);
     }
 
+    private CountSolver(AbstractSolver solver, int min, int max) {
+        this(null, solver, min, max);
+    }
+
     /**
      * 从min-max范围的匹配, max为-1表示无上限匹配
      *
@@ -35,7 +39,8 @@ public class CountSolver extends AbstractSolver {
      * @param min
      * @param max
      */
-    private CountSolver(AbstractSolver solver, int min, int max) {
+    private CountSolver(AbstractSolver parent, AbstractSolver solver, int min, int max) {
+        super(parent);
         this.solver = solver;
         this.min = min;
         this.max = max;
@@ -47,14 +52,15 @@ public class CountSolver extends AbstractSolver {
 
     @Override
     public boolean solve(MetaCommon ms) {
+        ms.gi(ms.i());
         if (min == -1) {
-            for (int i = 0; i < max; ++i) {
+            for (int i = 0; i < max && ms.notEnd(); ++i) {
                 if (!solver.solve(ms))
                     return false;
             }
         } else if (min > -1 && max != -1) {
             int count = 0;
-            while (solver.solve(ms)) {
+            while (ms.notEnd() && solver.solve(ms)) {
                 ++count;
                 if (count > max)
                     return false;
@@ -62,7 +68,7 @@ public class CountSolver extends AbstractSolver {
             return count >= min;
         } else if (min > -1) {
             int count = 0;
-            while (solver.solve(ms)) {
+            while (ms.notEnd() && solver.solve(ms)) {
                 ++count;
             }
             return count >= min;

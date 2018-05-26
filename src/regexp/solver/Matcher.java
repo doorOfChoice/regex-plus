@@ -22,7 +22,7 @@ public class Matcher {
         AbstractSolver t;
         while (mp.notEnd()) {
             if (mp.cur().equals("(")) {
-                TupleSolver next = new TupleSolver();
+                TupleSolver next = new TupleSolver(r.peek());
                 next.setParent(r);
                 r.add(next);
                 r = next;
@@ -31,11 +31,16 @@ public class Matcher {
             } else if (mp.cur().equals("|")) {
                 r.addOr();
             } else if (mp.cur().equals("[")) {
-                r.add(getSquareSolver(mp));
+                AbstractSolver solver = getSquareSolver(mp);
+                solver.setParent(r.peek());
+                r.add(solver);
             } else if ((t = getCountSolver(mp, r)) != null) {
+                t.setParent(r.peek());
                 r.add(t);
             } else {
-                r.add(getSimpleSolver(mp.cur()));
+                AbstractSolver solver = getSimpleSolver(mp.cur());
+                solver.setParent(r.peek());
+                r.add(solver);
             }
             mp.incr();
         }
@@ -157,7 +162,7 @@ public class Matcher {
         if (s.equals("^")) {
             return new BeginSolver();
         } else if (s.equals("$")) {
-            return new EndResolver();
+            return new EndSolver();
         } else if (s.equals(".")) {
             return new DotSolver();
         } else if (CharUtil.isSpecialString(s)) {

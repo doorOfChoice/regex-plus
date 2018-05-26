@@ -4,6 +4,10 @@ public class CommonSolver extends AbstractSolver {
     private String value;
 
     public CommonSolver(String value) {
+        this(null, value);
+    }
+
+    public CommonSolver(AbstractSolver parent, String value) {
         this.value = value;
     }
 

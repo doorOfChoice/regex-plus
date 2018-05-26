@@ -4,8 +4,57 @@ package regexp.solver;
  * AbstractSolver提供抽象的方法供Solver的具体实现使用
  */
 public abstract class AbstractSolver implements Solver {
+    protected AbstractSolver parent;
 
     public AbstractSolver() {
+    }
+
+    public AbstractSolver(AbstractSolver parent) {
+        this.parent = parent;
+    }
+
+    public void setParent(AbstractSolver parent) {
+        this.parent = parent;
+    }
+
+    public boolean isSpecial() {
+        return this instanceof SpecialSolver;
+    }
+
+    public boolean isBegin() {
+        return this instanceof BeginSolver;
+    }
+
+    public boolean isCommon() {
+        return this instanceof CommonSolver;
+    }
+
+    public boolean isCount() {
+        return this instanceof CountSolver;
+    }
+
+    public boolean isDot() {
+        return this instanceof DotSolver;
+    }
+
+    public boolean isEnd() {
+        return this instanceof EndSolver;
+    }
+
+    public boolean isOr() {
+        return this instanceof OrSolver;
+    }
+
+    public boolean isSquare() {
+        return this instanceof SquareSolver;
+    }
+
+    public boolean isTuple() {
+        return this instanceof CommonSolver;
+    }
+
+    public boolean isRange() {
+        return this instanceof RangeSolver;
     }
 
     /**

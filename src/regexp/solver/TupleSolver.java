@@ -11,6 +11,11 @@ public class TupleSolver extends AbstractSolver implements Tupler {
 
 
     public TupleSolver() {
+        this(null);
+    }
+
+    public TupleSolver(AbstractSolver parent) {
+        super(parent);
         this.solvers = new ArrayList<>();
         this.groups = new LinkedList<>();
         addOr();
@@ -29,8 +34,11 @@ public class TupleSolver extends AbstractSolver implements Tupler {
         //防止每次back都回到0位置，需要每次进入Tuple都更新一次di
         //之前的备份值
         int prevDi = ms.di();
+        //备份贪婪点
+        int prevGi = ms.gi();
         //设置当前开始位置为备份值
         ms.di(ms.i());
+        ms.giDel();
         //是否有成功的Or语句
         boolean ok = false;
         for (Solver solver : solvers) {
@@ -44,6 +52,8 @@ public class TupleSolver extends AbstractSolver implements Tupler {
         }
         //恢复备份上下文
         ms.di(prevDi);
+        //恢复贪婪点
+        ms.gi(prevGi);
         return ok;
     }
 

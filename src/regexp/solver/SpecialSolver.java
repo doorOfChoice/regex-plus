@@ -4,6 +4,11 @@ public class SpecialSolver extends AbstractSolver {
     private String value;
 
     public SpecialSolver(String value) {
+        this(null, value);
+    }
+
+    public SpecialSolver(AbstractSolver parent, String value) {
+        super(parent);
         this.value = value;
     }
 

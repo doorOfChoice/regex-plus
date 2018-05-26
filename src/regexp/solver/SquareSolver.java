@@ -11,6 +11,13 @@ public class SquareSolver extends AbstractSolver {
     private List<AbstractSolver> solvers = new ArrayList<>();
     private boolean not = false;
 
+    public SquareSolver() {
+    }
+
+    public SquareSolver(AbstractSolver parent) {
+        super(parent);
+    }
+
     public void setNot(boolean not) {
         this.not = not;
     }
@@ -33,7 +40,7 @@ public class SquareSolver extends AbstractSolver {
         }
         //如果不是否定句式说明字符串没有移动，那么进入OrSolver解析下一个Solver就会失败
         //判断否定句式则移动一格下标
-        if(not)
+        if (not)
             ms.incr();
         return not;
     }
