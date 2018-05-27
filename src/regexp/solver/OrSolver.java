@@ -39,33 +39,16 @@ public class OrSolver extends AbstractSolver {
 
     @Override
     public boolean solve(MetaCommon ms) {
-        for (int i = 0; i < solvers.size(); ++i) {
-            AbstractSolver solver = solvers.get(i);
+        for (AbstractSolver solver : solvers) {
+            if(solver.hasExtraStep)
+                continue;
             if (!solver.solve(ms)) {
-                //之前进行过贪婪操作并且回溯找到相应值
-                if (solver.prev != null
-                        && solver.prev.isCount()
-                        && ms.isGreedy()
-                        && track(solver, ms)) {
-                    continue;
-                }
                 ms.back();
                 return false;
             }
         }
         ms.update();
         return true;
-    }
-
-    private boolean track(Solver solver, MetaCommon ms) {
-        for (int i = ms.i() - 1; i >= ms.gi(); --i) {
-            ms.i(i);
-            if (solver.solve(ms)) {
-                ms.giDel();
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override

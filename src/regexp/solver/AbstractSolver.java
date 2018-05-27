@@ -6,6 +6,9 @@ package regexp.solver;
 public abstract class AbstractSolver implements Solver {
     protected AbstractSolver prev;
     protected AbstractSolver next;
+    protected AbstractSolver parent;
+    protected boolean hasExtraStep = false;
+
     public AbstractSolver() {
     }
 

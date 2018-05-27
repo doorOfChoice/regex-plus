@@ -1,5 +1,8 @@
 package regexp.solver;
 
+import java.util.Arrays;
+import java.util.Stack;
+
 /**
  * 普通字符串的元数据库
  */
@@ -14,12 +17,12 @@ class MetaCommon {
      * 用于 | 操作的时候快速回溯。当一个Or操作完全匹配会更新di为i，当进入一个()元组的时候,
      * 会备份改元组的起始点
      */
-    private int di = 0;
+    private Stack<Integer> di = new Stack<>();
     /**
      * 贪婪点
      * 用于记录* + ? {} 操作的起始点，默认为不开启，值为-1
      */
-    private int gi = 0;
+    private Stack<Integer> gi = new Stack<>();
 
     public MetaCommon(String s) {
         this.s = s;
@@ -70,7 +73,7 @@ class MetaCommon {
     }
 
     public String sDiToI() {
-        return s(di, i);
+        return s(di.peek(), i);
     }
 
     //返回下标
@@ -85,42 +88,44 @@ class MetaCommon {
 
     //返回贪婪点
     public int gi() {
-        return gi;
+        return gi.peek();
     }
 
     //设置贪婪下标
-    public void gi(int gi) {
-        this.gi = gi;
+    void giCreate() {
+        gi.set(gi.size() - 1, i);
     }
 
-    //移除贪婪下标
-    public void giDel() {
-        this.gi = -1;
+    void giSave() {
+        gi.push(i);
     }
 
-    //是否开启了贪婪模式
-    public boolean isGreedy() {
-        return gi != -1;
+    void giRestore() {
+        gi.pop();
     }
 
     //返回备份点
-    public int di() {
-        return di;
+    int di() {
+        return di.peek();
     }
+
     //设置备份点
-
-    public void di(int di) {
-        this.di = di;
+    void diSave() {
+        di.push(i);
     }
+
+    void diRestore() {
+        di.pop();
+    }
+
     //设置备份点为当前i
-
     public void update() {
-        this.di = i;
+        di.set(di.size() - 1, i);
     }
-    //还原备份
 
+    //还原备份
     public void back() {
-        this.i = di;
+        this.i = di.peek();
     }
 
 

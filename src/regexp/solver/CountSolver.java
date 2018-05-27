@@ -1,5 +1,9 @@
 package regexp.solver;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 public class CountSolver extends AbstractSolver {
     private AbstractSolver solver;
     //min为-1表示匹配固定个数为max的字符串
@@ -7,7 +11,7 @@ public class CountSolver extends AbstractSolver {
     //max为-1表示无匹配上限
     private int max = -1;
 
-    private boolean greedy = false;
+    private boolean greedy = true;
 
     static CountSolver produceStar(AbstractSolver solver) {
         return new CountSolver(solver, 0, -1);
@@ -46,13 +50,61 @@ public class CountSolver extends AbstractSolver {
         this.greedy = greedy;
     }
 
-    boolean isGreedy() {
-        return greedy;
-    }
 
     @Override
     public boolean solve(MetaCommon ms) {
-        ms.gi(ms.i());
+        ms.giSave();
+        try {
+            if (greedy) {
+                if (!solveGreedy(ms))
+                    return false;
+                List<AbstractSolver> solvers = new ArrayList<>();
+                AbstractSolver crossNext = getCrossNext(this);
+                if (crossNext == null)
+                    return true;
+                do {
+                    crossNext.hasExtraStep = true;
+                    solvers.add(crossNext);
+                } while ((crossNext = getCrossNext(crossNext)) != null);
+                for (int i = ms.i(); i >= ms.gi(); --i) {
+                    ms.i(i);
+                    if (track(ms, solvers)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        } finally {
+            ms.giRestore();
+        }
+
+    }
+
+    private boolean track(MetaCommon ms, List<AbstractSolver> solvers) {
+        for (AbstractSolver solver : solvers) {
+            boolean result = solver.solve(ms);
+            //某个元素如果也是CountResolver且成功，则不再判断后面的Solver，因为子CountResolver已经判断过
+            if (result && solver.isCount())
+                return true;
+            //如果有一个出错，则返回false
+            else if(!result) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private AbstractSolver getCrossNext(AbstractSolver solver) {
+        if (solver.next != null)
+            return solver.next;
+        AbstractSolver p = solver.parent;
+        while (p != null && p.next == null) p = p.parent;
+        if (p == null)
+            return null;
+        return p.next;
+    }
+
+    private boolean solveGreedy(MetaCommon ms) {
         if (min == -1) {
             for (int i = 0; i < max && ms.notEnd(); ++i) {
                 if (!solver.solve(ms))

@@ -8,7 +8,7 @@ public class Matcher {
 
     public Matcher(String pattern) {
         analyzePattern(new MetaPattern(pattern));
-        System.out.println(root);
+
     }
 
     public boolean match(String str) {
@@ -108,7 +108,7 @@ public class Matcher {
             return CountSolver.producePlus(r.pop());
         } else if (cur.equals("?")) {
             if (prev.isCount()) {
-                ((CountSolver) prev).setGreedy(true);
+                ((CountSolver) prev).setGreedy(false);
                 return r.pop();
             }
             return CountSolver.produceQuestion(r.pop());

@@ -27,17 +27,13 @@ public class TupleSolver extends AbstractSolver implements Tupler {
     public boolean solve(MetaCommon ms) {
         //防止每次back都回到0位置，需要每次进入Tuple都更新一次di
         //之前的备份值
-        int prevDi = ms.di();
-        //备份贪婪点
-        int prevGi = ms.gi();
-        //设置当前开始位置为备份值
-        ms.di(ms.i());
-        ms.giDel();
+        ms.diSave();
         //是否有成功的Or语句
-        boolean ok = false;
+        boolean success = false;
+
         for (Solver solver : solvers) {
             if (solver.solve(ms)) {
-                ok = true;
+                success = true;
                 if (solver instanceof Tupler)
                     groups.addAll(((Tupler) solver).array());
                 groups.addFirst(ms.sDiToI());
@@ -45,14 +41,13 @@ public class TupleSolver extends AbstractSolver implements Tupler {
             }
         }
         //恢复备份上下文
-        ms.di(prevDi);
-        //恢复贪婪点
-        ms.gi(prevGi);
-        return ok;
+        ms.diRestore();
+        return success;
     }
 
     @Override
     public void add(AbstractSolver solver) {
+        solver.parent = this;
         solvers.get(solvers.size() - 1).add(solver);
     }
 
@@ -76,7 +71,8 @@ public class TupleSolver extends AbstractSolver implements Tupler {
         return solvers.toString();
     }
 
-    public void addOr() {
+    void addOr() {
         solvers.add(new OrSolver());
     }
+
 }
