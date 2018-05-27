@@ -25,7 +25,7 @@ class CharUtil {
     }
 
     static boolean isWhiteChar(char ch) {
-        return ch == '\n' || ch == '\t' || ch == ' ' || ch == '\b';
+        return ch == '\n' || ch == '\t' || ch == ' ' || ch == '\b' || ch == '\r';
     }
 
     /**

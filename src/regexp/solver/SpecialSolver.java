@@ -19,6 +19,7 @@ public class SpecialSolver extends AbstractSolver {
                 || value.equals("\\w") && CharUtil.isPatternW(ch)
                 || value.equals("\\W") && !CharUtil.isPatternW(ch));
         if (specialResult) {
+            ms.incr();
             return true;
         }
         //否则判断转义

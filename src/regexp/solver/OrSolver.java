@@ -41,7 +41,6 @@ public class OrSolver extends AbstractSolver {
     public boolean solve(MetaCommon ms) {
         AbstractSolver node = head;
         while (node != null) {
-            //查看能否跳过某些节点
             if (!node.solve(ms)) {
                 ms.back();
                 return false;

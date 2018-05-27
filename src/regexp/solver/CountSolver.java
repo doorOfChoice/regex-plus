@@ -119,8 +119,8 @@ public class CountSolver extends AbstractSolver {
             int count = 0;
             while (ms.notEnd() && solver.solve(ms)) {
                 ++count;
-                if (count > max)
-                    return false;
+                if (count >= max)
+                    return true;
             }
             return count >= min;
         } else if (min > -1) {
