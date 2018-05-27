@@ -1,51 +1,59 @@
 package regexp.solver;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class OrSolver extends AbstractSolver {
-    private List<AbstractSolver> solvers = new ArrayList<>();
+    private AbstractSolver head;
+    private AbstractSolver tail;
 
     public OrSolver() {
     }
 
-
     @Override
     public void add(AbstractSolver solver) {
-        AbstractSolver prevNode = peek();
-        if (prevNode != null) prevNode.next = solver;
-        solver.prev = prevNode;
-        solvers.add(solver);
+        if (tail == null) {
+            head = tail = solver;
+        } else {
+            tail.next = solver;
+            solver.prev = tail;
+            tail = solver;
+        }
     }
 
     @Override
     public AbstractSolver pop() {
-        int index = solvers.size() - 1;
-        if (index < 0)
+        if (tail == null)
             return null;
-        AbstractSolver removeNode = solvers.remove(index);
-        if (removeNode.prev != null)
-            removeNode.prev.next = null;
-        return removeNode;
+        AbstractSolver popNode = tail;
+        tail = tail.prev;
+        popNode.prev = null;
+        if (tail != null)
+            tail.next = null;
+        else
+            head = null;
+        return popNode;
     }
 
     @Override
     public AbstractSolver peek() {
-        int index = solvers.size() - 1;
-        if (index < 0)
-            return null;
-        return solvers.get(index);
+        return tail;
     }
 
     @Override
     public boolean solve(MetaCommon ms) {
-        for (AbstractSolver solver : solvers) {
-            if(solver.hasExtraStep)
-                continue;
-            if (!solver.solve(ms)) {
+        AbstractSolver node = head;
+        while (node != null) {
+            //查看能否跳过某些节点
+            if (!node.solve(ms)) {
                 ms.back();
                 return false;
             }
+            AbstractSolver j = node.tryJump();
+            if (j != null && j != node) {
+                if (j != tail) {
+                    jump = j;
+                }
+                return true;
+            }
+            node = node.next;
         }
         ms.update();
         return true;
@@ -53,6 +61,12 @@ public class OrSolver extends AbstractSolver {
 
     @Override
     public String toString() {
-        return solvers.toString();
+        AbstractSolver node = head;
+        StringBuilder str = new StringBuilder();
+        while (node != null) {
+            str.append(node).append("|||");
+            node = node.next;
+        }
+        return str.toString();
     }
 }

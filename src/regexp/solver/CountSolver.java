@@ -58,15 +58,18 @@ public class CountSolver extends AbstractSolver {
             if (greedy) {
                 if (!solveGreedy(ms))
                     return false;
+                if (min == -1)
+                    return true;
                 List<AbstractSolver> solvers = new ArrayList<>();
                 AbstractSolver crossNext = getCrossNext(this);
                 if (crossNext == null)
                     return true;
                 do {
-                    crossNext.hasExtraStep = true;
                     solvers.add(crossNext);
                 } while ((crossNext = getCrossNext(crossNext)) != null);
-                for (int i = ms.i(); i >= ms.gi(); --i) {
+                int down = ms.gi() + min;
+                //验证后面的所以Solver是否都能解析
+                for (int i = ms.i(); i >= down; --i) {
                     ms.i(i);
                     if (track(ms, solvers)) {
                         return true;
@@ -77,20 +80,22 @@ public class CountSolver extends AbstractSolver {
         } finally {
             ms.giRestore();
         }
-
     }
 
     private boolean track(MetaCommon ms, List<AbstractSolver> solvers) {
         for (AbstractSolver s : solvers) {
             boolean result = s.solve(ms);
             //某个元素如果也是CountResolver且成功，则不再判断后面的Solver，因为子CountResolver已经判断过
-            if (result && (s.isCount() || s.isTuple()))
+            if (result && (s.isCount() || s.isTuple())) {
+                jump = s.tryJump();
                 return true;
+            }
             //如果有一个出错，则返回false
-            else if(!result) {
+            else if (!result) {
                 return false;
             }
         }
+        jump = solvers.size() != 0 ? solvers.get(solvers.size() - 1) : null;
         return true;
     }
 

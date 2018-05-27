@@ -31,12 +31,16 @@ public class TupleSolver extends AbstractSolver implements Tupler {
         //是否有成功的Or语句
         boolean success = false;
 
-        for (Solver solver : solvers) {
+        for (AbstractSolver solver : solvers) {
             if (solver.solve(ms)) {
                 success = true;
                 if (solver instanceof Tupler)
                     groups.addAll(((Tupler) solver).array());
                 groups.addFirst(ms.sDiToI());
+                jump = solver.tryJump();
+                //如果返回为空，则把自己返回, 因为在CountSolver中解析会提前预判TupleSolver
+                if(jump == null)
+                    jump = this;
                 break;
             }
         }

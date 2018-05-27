@@ -7,48 +7,54 @@ public abstract class AbstractSolver implements Solver {
     protected AbstractSolver prev;
     protected AbstractSolver next;
     protected AbstractSolver parent;
-    protected boolean hasExtraStep = false;
+    protected AbstractSolver jump;
 
     public AbstractSolver() {
     }
 
-    public boolean isSpecial() {
+    AbstractSolver tryJump() {
+        AbstractSolver node = jump;
+        jump = null;
+        return node;
+    }
+
+    boolean isSpecial() {
         return this instanceof SpecialSolver;
     }
 
-    public boolean isBegin() {
+    boolean isBegin() {
         return this instanceof BeginSolver;
     }
 
-    public boolean isCommon() {
+    boolean isCommon() {
         return this instanceof CommonSolver;
     }
 
-    public boolean isCount() {
+    boolean isCount() {
         return this instanceof CountSolver;
     }
 
-    public boolean isDot() {
+    boolean isDot() {
         return this instanceof DotSolver;
     }
 
-    public boolean isEnd() {
+    boolean isEnd() {
         return this instanceof EndSolver;
     }
 
-    public boolean isOr() {
+    boolean isOr() {
         return this instanceof OrSolver;
     }
 
-    public boolean isSquare() {
+    boolean isSquare() {
         return this instanceof SquareSolver;
     }
 
-    public boolean isTuple() {
+    boolean isTuple() {
         return this instanceof TupleSolver;
     }
 
-    public boolean isRange() {
+    boolean isRange() {
         return this instanceof RangeSolver;
     }
 
@@ -57,7 +63,7 @@ public abstract class AbstractSolver implements Solver {
      *
      * @param solver
      */
-    public void add(AbstractSolver solver) {
+    void add(AbstractSolver solver) {
         throw new UnsupportedOperationException("This Solver is not contain add method");
     }
 
@@ -66,7 +72,7 @@ public abstract class AbstractSolver implements Solver {
      *
      * @return
      */
-    public AbstractSolver pop() {
+    AbstractSolver pop() {
         throw new UnsupportedOperationException("This Solver is not contain add method");
     }
 
@@ -75,11 +81,11 @@ public abstract class AbstractSolver implements Solver {
      *
      * @return
      */
-    public AbstractSolver peek() {
+    AbstractSolver peek() {
         throw new UnsupportedOperationException("This Solver is not contain add method");
     }
 
-    public int size() {
+    int size() {
         throw new UnsupportedOperationException("This Solver is not contain add method");
     }
 
