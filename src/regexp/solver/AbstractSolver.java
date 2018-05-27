@@ -45,7 +45,7 @@ public abstract class AbstractSolver implements Solver {
     }
 
     public boolean isTuple() {
-        return this instanceof CommonSolver;
+        return this instanceof TupleSolver;
     }
 
     public boolean isRange() {
