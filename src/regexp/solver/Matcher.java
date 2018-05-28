@@ -40,7 +40,6 @@ public class Matcher {
             mp.incr();
         }
         root = r;
-        System.out.println(r);
     }
 
     /**
