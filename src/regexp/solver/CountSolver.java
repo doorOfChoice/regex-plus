@@ -85,14 +85,18 @@ public class CountSolver extends AbstractSolver {
     private boolean track(MetaCommon ms, List<AbstractSolver> solvers) {
         for (AbstractSolver s : solvers) {
             boolean result = s.solve(ms);
+            if (!result)
+                return false;
             //某个元素如果也是CountResolver且成功，则不再判断后面的Solver，因为子CountResolver已经判断过
-            if (result && (s.isCount() || s.isTuple())) {
+            if (s.isCount()) {
                 jump = s.tryJump();
                 return true;
-            }
-            //如果有一个出错，则返回false
-            else if (!result) {
-                return false;
+            } else if (s.isTuple()) {
+                //如果Tuple里面也包含CountSolver
+                if (s.jump != s) {
+                    jump = s.tryJump();
+                    return true;
+                }
             }
         }
         jump = solvers.size() != 0 ? solvers.get(solvers.size() - 1) : null;
