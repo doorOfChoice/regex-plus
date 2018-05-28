@@ -56,32 +56,105 @@ public class CountSolver extends AbstractSolver {
         ms.giSave();
         try {
             if (greedy) {
-                if (!solveGreedy(ms))
-                    return false;
-                if (min == -1)
-                    return true;
-                List<AbstractSolver> solvers = new ArrayList<>();
-                AbstractSolver crossNext = getCrossNext(this);
-                if (crossNext == null)
-                    return true;
-                do {
-                    solvers.add(crossNext);
-                } while ((crossNext = getCrossNext(crossNext)) != null);
-                int down = ms.gi() + min;
-                //验证后面的所以Solver是否都能解析
-                for (int i = ms.i(); i >= down; --i) {
-                    ms.i(i);
-                    if (track(ms, solvers)) {
-                        return true;
-                    }
-                }
+                return solveGreedy(ms);
             }
-            return false;
+            System.out.println(greedy);
+            return solveUnGreedy(ms);
         } finally {
             ms.giRestore();
         }
     }
 
+    /**
+     * 贪婪模式中判断solver是否满足匹配次数
+     * @param ms
+     * @return
+     */
+    private boolean matchByGreedy(MetaCommon ms) {
+        if (min == -1) {
+            for (int i = 0; i < max && ms.notEnd(); ++i) {
+                if (!solver.solve(ms))
+                    return false;
+            }
+        } else {
+            int count = 0;
+            while ((max == -1 || count < max) && ms.notEnd() && solver.solve(ms)) {
+                ++count;
+            }
+            return count >= min;
+        }
+        return true;
+    }
+
+    /**
+     * 贪婪模式 匹配次数成功后开始验证本次匹配是否能让后面全对，否则回溯
+     * @param ms
+     * @return
+     */
+    private boolean solveGreedy(MetaCommon ms) {
+        if (!matchByGreedy(ms))
+            return false;
+        if (min == -1)
+            return true;
+        List<AbstractSolver> solvers = getAllCrossNext(this);
+        if (solvers.isEmpty())
+            return true;
+        int down = ms.gi() + min;
+        //验证后面的所以Solver是否都能解析
+        for (int i = ms.i(); i >= down; --i) {
+            ms.i(i);
+            if (track(ms, solvers)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 非贪婪模式 匹配并且回溯
+     * @param ms
+     * @return
+     */
+    private boolean solveUnGreedy(MetaCommon ms) {
+        List<AbstractSolver> solvers = getAllCrossNext(this);
+        if (min == -1) {
+            for (int i = 0; i < max && ms.notEnd(); ++i) {
+                if (!solver.solve(ms)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        //max从0~无穷
+        for (int i = 0; i < min && ms.notEnd(); ++i) {
+            if (solver.solve(ms))
+                return false;
+        }
+        int index = min;
+        while ((max == -1 ||index < max) && ms.notEnd()) {
+            ms.giSave();
+            if (track(ms, solvers)) {
+                ms.giRestore();
+                return true;
+            }
+            ms.i(ms.gi());
+            ms.giRestore();
+            if (!solver.solve(ms)) {
+                return false;
+            }
+            ++index;
+        }
+        return true;
+
+    }
+
+    /**
+     * 执行一次回溯操作
+     * 执行成功则设置jump值，以便Or进行跳转
+     * @param ms
+     * @param solvers
+     * @return
+     */
     private boolean track(MetaCommon ms, List<AbstractSolver> solvers) {
         for (AbstractSolver s : solvers) {
             boolean result = s.solve(ms);
@@ -103,6 +176,12 @@ public class CountSolver extends AbstractSolver {
         return true;
     }
 
+    /**
+     * 下一个忽略小括号后获取的节点
+     * 例如(1(3))4, 3的下一个忽略右小括号的节点是4，忽略了))
+     * @param solver
+     * @return
+     */
     private AbstractSolver getCrossNext(AbstractSolver solver) {
         if (solver.next != null)
             return solver.next;
@@ -113,28 +192,20 @@ public class CountSolver extends AbstractSolver {
         return p.next;
     }
 
-    private boolean solveGreedy(MetaCommon ms) {
-        if (min == -1) {
-            for (int i = 0; i < max && ms.notEnd(); ++i) {
-                if (!solver.solve(ms))
-                    return false;
-            }
-        } else if (min > -1 && max != -1) {
-            int count = 0;
-            while (ms.notEnd() && solver.solve(ms)) {
-                ++count;
-                if (count >= max)
-                    return true;
-            }
-            return count >= min;
-        } else if (min > -1) {
-            int count = 0;
-            while (ms.notEnd() && solver.solve(ms)) {
-                ++count;
-            }
-            return count >= min;
-        }
-        return true;
+    /**
+     * 获取所有的忽略小括号后获取的节点
+     * @param solver
+     * @return
+     */
+    private List<AbstractSolver> getAllCrossNext(AbstractSolver solver) {
+        List<AbstractSolver> solvers = new ArrayList<>();
+        AbstractSolver crossNext = getCrossNext(this);
+        if (crossNext == null)
+            return solvers;
+        do {
+            solvers.add(crossNext);
+        } while ((crossNext = getCrossNext(crossNext)) != null);
+        return solvers;
     }
 
     @Override
