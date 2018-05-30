@@ -1,6 +1,5 @@
 package regexp.born;
 
-import regexp.CharUtil;
 import regexp.MetaString;
 import regexp.MetaPattern;
 import regexp.born.solvers.*;

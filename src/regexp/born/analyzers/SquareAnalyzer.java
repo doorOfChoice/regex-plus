@@ -1,6 +1,5 @@
 package regexp.born.analyzers;
 
-import regexp.CharUtil;
 import regexp.MetaPattern;
 import regexp.born.solvers.*;
 
@@ -37,7 +36,7 @@ public class SquareAnalyzer implements Analyzer {
                     //前继节点不为空, 说明可以进行单个和范围判断
                     if (prev != null) {
                         if (!isRange) {
-                            squareSolver.add(CharUtil.isSpecialString(t) ? new SpecialSolver(prev) : new CommonSolver(prev));
+                            squareSolver.add(SpecialSolver.isSpecialString(t) ? new SpecialSolver(prev) : new CommonSolver(prev));
                             prev = t;
                         } else {
                             squareSolver.add(new RangeSolver(prev, t));
