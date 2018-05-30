@@ -26,7 +26,6 @@ public class SquareAnalyzer implements Analyzer {
                 throw new IllegalArgumentException("Cannot find close ]");
             mp.incr();
             String t = mp.cur();
-
             switch (t) {
                 case "-":
                     isRange = true;
@@ -57,6 +56,7 @@ public class SquareAnalyzer implements Analyzer {
         }
         if (squareSolver.size() == 0)
             throw new IllegalArgumentException("U need pass some args into []");
+        mp.incr();
         return squareSolver;
     }
 }
