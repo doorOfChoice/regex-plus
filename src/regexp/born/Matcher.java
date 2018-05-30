@@ -38,6 +38,9 @@ public class Matcher {
     }
 
     public void register(Analyzer analyzer) {
+        if (analyzer == null) {
+            throw new NullPointerException("analyzer need to be not null");
+        }
         analyzers.add(analyzer);
     }
 
