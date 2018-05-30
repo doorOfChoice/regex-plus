@@ -9,6 +9,7 @@ public abstract class AbstractSolver implements Solver {
     private AbstractSolver prev;
     private AbstractSolver next;
     private AbstractSolver parent;
+    private int group = -1;
 
     public AbstractSolver() {
     }
@@ -43,16 +44,38 @@ public abstract class AbstractSolver implements Solver {
         this.parent = parent;
     }
 
-    boolean solve(AbstractSolver solver, MetaString ms) {
-        if (solver == null)
-            return true;
-        return solver.solve(ms);
+    public int getGroup() {
+        return group;
     }
 
-    boolean solveAndNext(AbstractSolver solver, MetaString ms) {
+    public void setGroup(int group) {
+        this.group = group;
+    }
+
+    protected boolean solve(AbstractSolver solver, MetaString ms) {
         if (solver == null)
             return true;
+        if (solver.solve(ms)) {
+            setParentMaxRange(ms, ms.i());
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean solveAndNext(AbstractSolver solver, MetaString ms) {
+        if (solver == null)
+            return true;
+        setParentMaxRange(ms, ms.i());
         return solver.solveAndNext(ms);
     }
 
+
+    private void setParentMaxRange(MetaString ms, int max) {
+        AbstractSolver node = this;
+        while (node != null) {
+            if (node.group != -1)
+                ms.setRangesMax(node.group, max);
+            node = node.parent;
+        }
+    }
 }

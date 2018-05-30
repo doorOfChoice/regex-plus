@@ -1,11 +1,23 @@
 package regexp;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 /**
  * 普通字符串的元数据库
  */
 public class MetaString {
+    class Range {
+        int min = 0;
+        int max = 0;
+
+        @Override
+        public String toString() {
+            return "[" + min + "," + max + "]";
+        }
+    }
+
     private String s;
     /**
      * 当前下标
@@ -17,15 +29,47 @@ public class MetaString {
      * 会备份改元组的起始点
      */
     private Stack<Integer> di = new Stack<>();
+
     /**
-     * 贪婪点
-     * 用于记录* + ? {} 操作的起始点，默认为不开启，值为-1
+     * 分组范围集合
+     * 用户获取分组中起始点和结束点，以获取相应的字符串
      */
-    private Stack<Integer> gi = new Stack<>();
+    private List<Range> ranges = new ArrayList<Range>();
 
     public MetaString(String s) {
         this.s = s;
     }
+
+    public void buildRanges(int size) {
+        for (int i = 0; i < size; ++i) {
+            ranges.add(new Range());
+        }
+    }
+
+    //获取分组得到的范围列表
+    public List<Range> getRanges() {
+        return ranges;
+    }
+
+    //获取分组得到的字符串
+    public List<String> getRangesString() {
+        List<String> rs = new ArrayList<>();
+        for (Range range : ranges) {
+            rs.add(s(range.min, range.max));
+        }
+        return rs;
+    }
+
+    //设置某一组的最小值
+    public void setRangesMin(int index, int min) {
+        ranges.get(index).min = min;
+    }
+
+    //设置某一组的最大值
+    public void setRangesMax(int index, int max) {
+        ranges.get(index).max = max;
+    }
+
 
     public boolean ok() {
         return i + 1 < s.length();
@@ -93,25 +137,6 @@ public class MetaString {
         this.i = i;
     }
 
-    //返回贪婪点
-    public int gi() {
-        return gi.peek();
-    }
-
-    //设置贪婪下标
-    public void giCreate() {
-        gi.set(gi.size() - 1, i);
-    }
-
-    //gi备份
-    public void giSave() {
-        gi.push(i);
-    }
-
-    //gi回档
-    public void giRestore() {
-        gi.pop();
-    }
 
     public int di() {
         return di.peek();
@@ -119,7 +144,7 @@ public class MetaString {
 
     //di备份
     public void diRestore() {
-        di.pop();
+        i = di.pop();
     }
 
     //di回档

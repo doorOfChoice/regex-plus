@@ -9,6 +9,7 @@ import java.util.List;
 
 public class Matcher {
     private CoreSolver root = new CoreSolver();
+    private int groupSize = 0;
 
     public Matcher(String pattern) {
         analyzePattern(new MetaPattern(pattern));
@@ -17,8 +18,19 @@ public class Matcher {
 
     public boolean match(String str) {
         MetaString ms = new MetaString(str);
+        ms.buildRanges(groupSize);
         AbstractSolver solver = root;
         return solver.solveAndNext(ms);
+    }
+
+    public List<String> matchAndGetGroup(String str) {
+        MetaString ms = new MetaString(str);
+        ms.buildRanges(groupSize);
+        AbstractSolver solver = root;
+        if (solver.solveAndNext(ms)) {
+            return ms.getRangesString();
+        }
+        return null;
     }
 
     private void analyzePattern(MetaPattern mp) {
@@ -29,15 +41,16 @@ public class Matcher {
             if (ch.equals("(")) {
                 CoreSolver coreSolver = new CoreSolver();
                 coreSolver.setParent(r);
+                coreSolver.setGroup(groupSize++);
                 r.add(coreSolver);
                 r = coreSolver;
             } else if (ch.equals(")")) {
                 r = (CoreSolver) r.parent();
             } else if (ch.equals("|")) {
                 r.addOr();
-            } else if(ch.equals("[")){
+            } else if (ch.equals("[")) {
                 r.add(getSquareSolver(mp));
-            }else if ((t = getCountSolver(mp, r)) != null) {
+            } else if ((t = getCountSolver(mp, r)) != null) {
                 r.add(t);
             } else {
                 r.add(getSimpleSolver(mp.cur()));
@@ -182,7 +195,7 @@ public class Matcher {
             return new EndSolver();
         } else if (s.equals(".")) {
             return new DotSolver();
-        }else if(CharUtil.isSpecialString(s))
+        } else if (CharUtil.isSpecialString(s))
             return new SpecialSolver(s);
         return new CommonSolver(s);
 

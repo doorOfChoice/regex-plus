@@ -17,7 +17,7 @@ public class CoreSolver extends AbstractSolver {
         AbstractSolver tail;
 
         void add(AbstractSolver solver) {
-            if(parent() != null) {
+            if (parent() != null) {
                 solver.setParent(CoreSolver.this);
             }
             if (tail == null) {
@@ -68,6 +68,9 @@ public class CoreSolver extends AbstractSolver {
         Label:
         for (SolverList solverList : solverLists) {
             AbstractSolver node = solverList.head;
+            //设置当前分组的最小下标
+            if(getGroup() != -1)
+                ms.setRangesMin(getGroup(), ms.i());
             while (node != null) {
                 if (!super.solve(node, ms)) {
                     continue Label;
@@ -83,6 +86,8 @@ public class CoreSolver extends AbstractSolver {
     public boolean solveAndNext(MetaString ms) {
         for (SolverList solverList : solverLists) {
             ms.diSave();
+            if(getGroup() != -1)
+                ms.setRangesMin(getGroup(), ms.i());
             if (super.solveAndNext(solverList.head, ms)) {
                 return true;
             }
