@@ -10,6 +10,6 @@ public class EndSolver extends AbstractSolver {
 
     @Override
     public boolean solveAndNext(MetaString ms) {
-        return super.solve(next(), ms);
+        return solve(ms) && super.solveAndNext(next(), ms);
     }
 }

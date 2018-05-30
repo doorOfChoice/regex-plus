@@ -1,5 +1,6 @@
 package regexp.born;
 
+import regexp.CharUtil;
 import regexp.MetaString;
 import regexp.MetaPattern;
 
@@ -34,7 +35,9 @@ public class Matcher {
                 r = (CoreSolver) r.parent();
             } else if (ch.equals("|")) {
                 r.addOr();
-            } else if ((t = getCountSolver(mp, r)) != null) {
+            } else if(ch.equals("[")){
+                r.add(getSquareSolver(mp));
+            }else if ((t = getCountSolver(mp, r)) != null) {
                 r.add(t);
             } else {
                 r.add(getSimpleSolver(mp.cur()));
@@ -50,51 +53,51 @@ public class Matcher {
      * @param mp
      * @return
      */
-//    private AbstractSolver getSquareSolver(MetaPattern mp) {
-//        SquareSolver squareSolver = new SquareSolver();
-//        boolean isRange = false;
-//        String prev = null;
-//
-//        Label:
-//        while (true) {
-//            //因为是从[开始，所以判断下一个下标是否合法
-//            if (!mp.ok())
-//                throw new IllegalArgumentException("Cannot find close ]");
-//            mp.incr();
-//            String t = mp.cur();
-//
-//            switch (t) {
-//                case "-":
-//                    isRange = true;
-//                    break;
-//                case "^":
-//                    squareSolver.setNot(true);
-//                    break;
-//                default:
-//                    //前继节点不为空, 说明可以进行单个和范围判断
-//                    if (prev != null) {
-//                        if (!isRange) {
-//                            squareSolver.add(CharUtil.isSpecialString(t) ? new SpecialSolver(prev) : new CommonSolver(prev));
-//                            prev = t;
-//                        } else {
-//                            squareSolver.add(new RangeSolver(prev, t));
-//                            prev = null;
-//                            isRange = false;
-//                        }
-//                    } else {
-//                        prev = t;
-//                    }
-//                    //到末尾，跳出
-//                    if (t.equals("]")) {
-//                        break Label;
-//                    }
-//                    break;
-//            }
-//        }
-//        if (squareSolver.size() == 0)
-//            throw new IllegalArgumentException("U need pass some args into []");
-//        return squareSolver;
-//    }
+    private AbstractSolver getSquareSolver(MetaPattern mp) {
+        SquareSolver squareSolver = new SquareSolver();
+        boolean isRange = false;
+        String prev = null;
+
+        Label:
+        while (true) {
+            //因为是从[开始，所以判断下一个下标是否合法
+            if (!mp.ok())
+                throw new IllegalArgumentException("Cannot find close ]");
+            mp.incr();
+            String t = mp.cur();
+
+            switch (t) {
+                case "-":
+                    isRange = true;
+                    break;
+                case "^":
+                    squareSolver.setNot(true);
+                    break;
+                default:
+                    //前继节点不为空, 说明可以进行单个和范围判断
+                    if (prev != null) {
+                        if (!isRange) {
+                            squareSolver.add(CharUtil.isSpecialString(t) ? new SpecialSolver(prev) : new CommonSolver(prev));
+                            prev = t;
+                        } else {
+                            squareSolver.add(new RangeSolver(prev, t));
+                            prev = null;
+                            isRange = false;
+                        }
+                    } else {
+                        prev = t;
+                    }
+                    //到末尾，跳出
+                    if (t.equals("]")) {
+                        break Label;
+                    }
+                    break;
+            }
+        }
+        if (squareSolver.size() == 0)
+            throw new IllegalArgumentException("U need pass some args into []");
+        return squareSolver;
+    }
 
     /**
      * 分析出{0,n},*,+,?的数量匹配
@@ -179,7 +182,8 @@ public class Matcher {
             return new EndSolver();
         } else if (s.equals(".")) {
             return new DotSolver();
-        }
+        }else if(CharUtil.isSpecialString(s))
+            return new SpecialSolver(s);
         return new CommonSolver(s);
 
     }
