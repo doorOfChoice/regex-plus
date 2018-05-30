@@ -1,4 +1,4 @@
-package regexp.born;
+package regexp.born.solvers;
 
 
 import regexp.MetaString;
@@ -9,31 +9,31 @@ public class CountSolver extends AbstractSolver {
     private int max;
     private boolean greedy = true;
 
-    void setGreedy(boolean greedy) {
+    public void setGreedy(boolean greedy) {
         this.greedy = greedy;
     }
 
-    static CountSolver produceStar(AbstractSolver solver) {
+    public static CountSolver produceStar(AbstractSolver solver) {
         return new CountSolver(solver, 0, -1);
     }
 
-    static CountSolver producePlus(AbstractSolver solver) {
+    public static CountSolver producePlus(AbstractSolver solver) {
         return new CountSolver(solver, 1, -1);
     }
 
-    static CountSolver produceQuestion(AbstractSolver solver) {
+    public static CountSolver produceQuestion(AbstractSolver solver) {
         return new CountSolver(solver, 0, 1);
     }
 
-    static CountSolver produceFixed(AbstractSolver solver, int count) {
+    public static CountSolver produceFixed(AbstractSolver solver, int count) {
         return new CountSolver(solver, -1, count);
     }
 
-    static CountSolver produce(AbstractSolver solver, int min, int max) {
+    public static CountSolver produce(AbstractSolver solver, int min, int max) {
         return new CountSolver(solver, min, max);
     }
 
-    CountSolver(AbstractSolver solver, int min, int max) {
+    private CountSolver(AbstractSolver solver, int min, int max) {
         this.solver = solver;
         this.min = min;
         this.max = max;

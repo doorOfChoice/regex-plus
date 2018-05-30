@@ -1,4 +1,4 @@
-package regexp.born;
+package regexp.born.solvers;
 
 import regexp.MetaString;
 
@@ -69,7 +69,7 @@ public class CoreSolver extends AbstractSolver {
         for (SolverList solverList : solverLists) {
             AbstractSolver node = solverList.head;
             //设置当前分组的最小下标
-            if(getGroup() != -1)
+            if (getGroup() != -1)
                 ms.setRangesMin(getGroup(), ms.i());
             while (node != null) {
                 if (!super.solve(node, ms)) {
@@ -86,7 +86,7 @@ public class CoreSolver extends AbstractSolver {
     public boolean solveAndNext(MetaString ms) {
         for (SolverList solverList : solverLists) {
             ms.diSave();
-            if(getGroup() != -1)
+            if (getGroup() != -1)
                 ms.setRangesMin(getGroup(), ms.i());
             if (super.solveAndNext(solverList.head, ms)) {
                 return true;

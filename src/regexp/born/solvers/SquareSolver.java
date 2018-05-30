@@ -1,4 +1,4 @@
-package regexp.born;
+package regexp.born.solvers;
 
 import regexp.MetaString;
 
@@ -34,13 +34,12 @@ public class SquareSolver extends AbstractSolver {
             if (solver.solve(ms))
                 return !not;
         }
-
         return false;
     }
 
     @Override
     public boolean solveAndNext(MetaString ms) {
-        if(solve(ms)) {
+        if (solve(ms)) {
             boolean result = super.solveAndNext(next(), ms);
             ms.decr();
             return result;

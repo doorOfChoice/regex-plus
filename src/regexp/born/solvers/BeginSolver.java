@@ -1,4 +1,4 @@
-package regexp.born;
+package regexp.born.solvers;
 
 import regexp.MetaString;
 

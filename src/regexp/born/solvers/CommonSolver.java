@@ -1,11 +1,17 @@
-package regexp.born;
+package regexp.born.solvers;
 
 import regexp.MetaString;
 
-public class DotSolver extends AbstractSolver {
+public class CommonSolver extends AbstractSolver {
+    private String ch;
+
+    public CommonSolver(String ch) {
+        this.ch = ch;
+    }
+
     @Override
     public boolean solve(MetaString ms) {
-        if (ms.notEnd()) {
+        if (ms.notEnd() && ms.cur().equals(ch)) {
             ms.incr();
             return true;
         }

@@ -1,4 +1,4 @@
-package regexp.born;
+package regexp.born.solvers;
 
 import regexp.MetaString;
 
@@ -14,21 +14,21 @@ public abstract class AbstractSolver implements Solver {
     public AbstractSolver() {
     }
 
-    protected AbstractSolver next() {
+    public AbstractSolver next() {
         AbstractSolver n = this;
         while (n != null && n.next == null) n = n.parent;
         return n == null ? null : n.next;
     }
 
-    protected AbstractSolver directNext() {
+    public AbstractSolver directNext() {
         return next;
     }
 
-    protected AbstractSolver prev() {
+    public AbstractSolver prev() {
         return prev;
     }
 
-    protected AbstractSolver parent() {
+    public AbstractSolver parent() {
         return parent;
     }
 
@@ -52,6 +52,12 @@ public abstract class AbstractSolver implements Solver {
         this.group = group;
     }
 
+    /**
+     * 解析对应solver，并且设置分组max下标
+     * @param solver
+     * @param ms
+     * @return
+     */
     protected boolean solve(AbstractSolver solver, MetaString ms) {
         if (solver == null)
             return true;
@@ -61,7 +67,12 @@ public abstract class AbstractSolver implements Solver {
         }
         return false;
     }
-
+    /**
+     * 解析对应solver并且递归解析，并且设置分组max下标
+     * @param solver
+     * @param ms
+     * @return
+     */
     protected boolean solveAndNext(AbstractSolver solver, MetaString ms) {
         if (solver == null)
             return true;
@@ -69,7 +80,11 @@ public abstract class AbstractSolver implements Solver {
         return solver.solveAndNext(ms);
     }
 
-
+    /**
+     * 设置所有父级的max下标
+     * @param ms
+     * @param max
+     */
     private void setParentMaxRange(MetaString ms, int max) {
         AbstractSolver node = this;
         while (node != null) {
