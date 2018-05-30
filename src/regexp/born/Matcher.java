@@ -46,26 +46,31 @@ public class Matcher {
         CoreSolver r = root;
         while (mp.notEnd()) {
             String ch = mp.cur();
-            if (ch.equals("(")) {
-                CoreSolver coreSolver = new CoreSolver();
-                coreSolver.setParent(r);
-                coreSolver.setGroup(groupSize++);
-                r.add(coreSolver);
-                r = coreSolver;
-                mp.incr();
-            } else if (ch.equals(")")) {
-                r = (CoreSolver) r.parent();
-                mp.incr();
-            } else if (ch.equals("|")) {
-                r.addOr();
-                mp.incr();
-            } else {
-                for (int i = analyzers.size() - 1; i >= 0; --i) {
-                    if (analyzers.get(i).satisfy(mp)) {
-                        r.add(analyzers.get(i).gain(mp, r));
-                        break;
+            switch (ch) {
+                case "(":
+                    CoreSolver coreSolver = new CoreSolver();
+                    coreSolver.setParent(r);
+                    coreSolver.setGroup(groupSize++);
+                    r.add(coreSolver);
+                    r = coreSolver;
+                    mp.incr();
+                    break;
+                case ")":
+                    r = (CoreSolver) r.parent();
+                    mp.incr();
+                    break;
+                case "|":
+                    r.addOr();
+                    mp.incr();
+                    break;
+                default:
+                    for (int i = analyzers.size() - 1; i >= 0; --i) {
+                        if (analyzers.get(i).satisfy(mp)) {
+                            r.add(analyzers.get(i).gain(mp, r));
+                            break;
+                        }
                     }
-                }
+                    break;
             }
         }
     }
