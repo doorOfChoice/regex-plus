@@ -9,7 +9,7 @@ import regexp.born.solvers.*;
  */
 public class SquareAnalyzer implements Analyzer {
     @Override
-    public boolean satisfy(MetaPattern mp) {
+    public boolean satisfy(MetaPattern mp, CoreSolver r) {
         return mp.notEnd() && mp.cur().equals("[");
     }
 
