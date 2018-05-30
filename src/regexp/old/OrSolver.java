@@ -1,4 +1,6 @@
-package regexp.solver;
+package regexp.old;
+
+import regexp.MetaString;
 
 public class OrSolver extends AbstractSolver {
     private AbstractSolver head;
@@ -38,7 +40,7 @@ public class OrSolver extends AbstractSolver {
     }
 
     @Override
-    public boolean solve(MetaCommon ms) {
+    public boolean solve(MetaString ms) {
         AbstractSolver node = head;
         while (node != null) {
             if (!node.solve(ms)) {

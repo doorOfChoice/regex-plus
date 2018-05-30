@@ -1,9 +1,9 @@
-package regexp.solver;
+package regexp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-class CharUtil {
+public class CharUtil {
     private static ArrayList<Character> specials = new ArrayList<>(
             Arrays.asList('s', 'S', 'w', 'W', 'd', 'D', '+', '{', '}', '[', ']', '*', '^', '$', '?', '\\')
     );
@@ -20,11 +20,11 @@ class CharUtil {
      * @param ch
      * @return
      */
-    static boolean isPatternW(char ch) {
+    public static boolean isPatternW(char ch) {
         return Character.isDigit(ch) || Character.isLetter(ch) || ch == '_';
     }
 
-    static boolean isWhiteChar(char ch) {
+    public static boolean isWhiteChar(char ch) {
         return ch == '\n' || ch == '\t' || ch == ' ' || ch == '\b' || ch == '\r';
     }
 
@@ -34,7 +34,7 @@ class CharUtil {
      * @param ch
      * @return
      */
-    static boolean isEscaping(char ch) {
+    public static boolean isEscaping(char ch) {
         return escaping.contains(ch);
     }
 
@@ -44,7 +44,7 @@ class CharUtil {
      * @param ch
      * @return
      */
-    static boolean isSpecial(char ch) {
+    public static boolean isSpecial(char ch) {
         return specials.contains(ch);
     }
 
@@ -54,7 +54,7 @@ class CharUtil {
      * @param s
      * @return
      */
-    static boolean isSpecialString(String s) {
+    public static boolean isSpecialString(String s) {
         if (s.length() != 2)
             return false;
         return s.charAt(0) == '\\' && isSpecial(s.charAt(1));

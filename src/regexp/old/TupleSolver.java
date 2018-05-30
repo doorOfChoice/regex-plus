@@ -1,4 +1,6 @@
-package regexp.solver;
+package regexp.old;
+
+import regexp.MetaString;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -24,7 +26,7 @@ public class TupleSolver extends AbstractSolver implements Tupler {
     }
 
     @Override
-    public boolean solve(MetaCommon ms) {
+    public boolean solve(MetaString ms) {
         //防止每次back都回到0位置，需要每次进入Tuple都更新一次di
         //之前的备份值
         ms.diSave();

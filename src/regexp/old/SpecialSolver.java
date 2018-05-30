@@ -1,4 +1,7 @@
-package regexp.solver;
+package regexp.old;
+
+import regexp.CharUtil;
+import regexp.MetaString;
 
 public class SpecialSolver extends AbstractSolver {
     private String value;
@@ -8,7 +11,7 @@ public class SpecialSolver extends AbstractSolver {
     }
 
     @Override
-    public boolean solve(MetaCommon ms) {
+    public boolean solve(MetaString ms) {
         boolean notEnd = ms.notEnd();
         char ch = notEnd ? ms.cur().charAt(0) : '\0';
         //先判断该特殊字符串是否有特别的意思

@@ -1,4 +1,6 @@
-package regexp.solver;
+package regexp.old;
+
+import regexp.MetaString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +31,7 @@ public class SquareSolver extends AbstractSolver {
     }
 
     @Override
-    public boolean solve(MetaCommon ms) {
+    public boolean solve(MetaString ms) {
         for (Solver solver : solvers) {
             if (solver.solve(ms))
                 return !not;

@@ -1,9 +1,9 @@
-package regexp.solver;
+package regexp;
 
 /**
  * 正则字符串的元数据库
  */
-class MetaPattern implements Cloneable {
+public class MetaPattern implements Cloneable {
     private int i = 0;
     private String s;
 
@@ -37,7 +37,7 @@ class MetaPattern implements Cloneable {
     public String cur() {
         String r;
         if (isSpecial())
-            return special();
+            return s.substring(i, i + 2);
         return s.charAt(i) + "";
 
     }
@@ -55,10 +55,7 @@ class MetaPattern implements Cloneable {
     public String next() {
         String r;
         if (isSpecial()) {
-            if (isSpecial(i + 2))
-                r = s.substring(i + 2, i + 4);
-            else
-                r = s.substring(i + 2, i + 3);
+            r = isSpecial(i + 2) ? s.substring(i + 2, i + 4) : s.substring(i + 2, i + 3);
         } else
             r = isSpecial(i + 1) ? s.substring(i + 1, i + 3) : s.substring(i + 1, i + 2);
         checkEscape(r);
@@ -77,19 +74,12 @@ class MetaPattern implements Cloneable {
         return s.substring(j, j + 1);
     }
 
-    public String special() {
-        return s.substring(i, i + 2);
-    }
-
-    public boolean isZero() {
-        return i == 0;
-    }
 
     public boolean isSpecial() {
         boolean result = isSpecial(i);
-        if (!result && s.substring(i, i + 1).equals("\\"))
+        if (!result && s.charAt(i) == '\\')
             throw new IllegalArgumentException("After \\ u need offer a special character");
-        return isSpecial(i);
+        return result;
     }
 
     private boolean isSpecial(int v) {

@@ -1,7 +1,8 @@
-package regexp.solver;
+package regexp.old;
+
+import regexp.MetaString;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class CountSolver extends AbstractSolver {
@@ -52,7 +53,7 @@ public class CountSolver extends AbstractSolver {
 
 
     @Override
-    public boolean solve(MetaCommon ms) {
+    public boolean solve(MetaString ms) {
         ms.giSave();
         try {
             if (greedy) {
@@ -70,7 +71,7 @@ public class CountSolver extends AbstractSolver {
      * @param ms
      * @return
      */
-    private boolean matchByGreedy(MetaCommon ms) {
+    private boolean matchByGreedy(MetaString ms) {
         if (min == -1) {
             for (int i = 0; i < max && ms.notEnd(); ++i) {
                 if (!solver.solve(ms))
@@ -91,7 +92,7 @@ public class CountSolver extends AbstractSolver {
      * @param ms
      * @return
      */
-    private boolean solveGreedy(MetaCommon ms) {
+    private boolean solveGreedy(MetaString ms) {
         if (!matchByGreedy(ms))
             return false;
         if (min == -1)
@@ -115,7 +116,7 @@ public class CountSolver extends AbstractSolver {
      * @param ms
      * @return
      */
-    private boolean solveUnGreedy(MetaCommon ms) {
+    private boolean solveUnGreedy(MetaString ms) {
         List<AbstractSolver> solvers = getAllCrossNext(this);
         if (min == -1) {
             for (int i = 0; i < max && ms.notEnd(); ++i) {
@@ -155,7 +156,7 @@ public class CountSolver extends AbstractSolver {
      * @param solvers
      * @return
      */
-    private boolean track(MetaCommon ms, List<AbstractSolver> solvers) {
+    private boolean track(MetaString ms, List<AbstractSolver> solvers) {
         for (AbstractSolver s : solvers) {
             boolean result = s.solve(ms);
             if (!result)

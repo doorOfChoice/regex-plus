@@ -1,4 +1,6 @@
-package regexp.solver;
+package regexp.old;
+
+import regexp.MetaString;
 
 /**
  * 范围解析器
@@ -14,7 +16,7 @@ public class RangeSolver extends AbstractSolver {
     }
 
     @Override
-    public boolean solve(MetaCommon ms) {
+    public boolean solve(MetaString ms) {
         boolean result = ms.notEnd() && min.compareTo(ms.cur()) <= 0 && max.compareTo(ms.cur()) >= 0;
         if (result) ms.incr();
         return result;

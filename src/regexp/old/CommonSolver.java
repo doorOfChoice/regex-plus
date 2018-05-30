@@ -1,4 +1,6 @@
-package regexp.solver;
+package regexp.old;
+
+import regexp.MetaString;
 
 public class CommonSolver extends AbstractSolver {
     private String value;
@@ -12,7 +14,7 @@ public class CommonSolver extends AbstractSolver {
     }
 
     @Override
-    public boolean solve(MetaCommon ms) {
+    public boolean solve(MetaString ms) {
         boolean result = ms.notEnd() && value.equals(ms.cur());
         if (result)
             ms.incr();

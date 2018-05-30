@@ -1,12 +1,11 @@
-package regexp.solver;
+package regexp;
 
-import java.util.Arrays;
 import java.util.Stack;
 
 /**
  * 普通字符串的元数据库
  */
-class MetaCommon {
+public class MetaString {
     private String s;
     /**
      * 当前下标
@@ -24,7 +23,7 @@ class MetaCommon {
      */
     private Stack<Integer> gi = new Stack<>();
 
-    public MetaCommon(String s) {
+    public MetaString(String s) {
         this.s = s;
     }
 
@@ -36,14 +35,22 @@ class MetaCommon {
         return i != s.length();
     }
 
-    public String incr() {
-        return s.charAt(i++) + "";
+    public int incr() {
+        return i++;
     }
 
-    public String incrAndUpdate() {
-        String ch = incr();
-        update();
-        return ch;
+    public int decr() {
+        return i--;
+    }
+
+    public String incrAndGet() {
+        incr();
+        return cur();
+    }
+
+    public String decrAndGet() {
+        decr();
+        return cur();
     }
 
     public String incr(int x) {
@@ -92,30 +99,32 @@ class MetaCommon {
     }
 
     //设置贪婪下标
-    void giCreate() {
+    public void giCreate() {
         gi.set(gi.size() - 1, i);
     }
 
-    void giSave() {
+    //gi备份
+    public void giSave() {
         gi.push(i);
     }
 
-    void giRestore() {
+    //gi回档
+    public void giRestore() {
         gi.pop();
     }
 
-    //返回备份点
-    int di() {
+    public int di() {
         return di.peek();
     }
 
-    //设置备份点
-    void diSave() {
-        di.push(i);
+    //di备份
+    public void diRestore() {
+        di.pop();
     }
 
-    void diRestore() {
-        di.pop();
+    //di回档
+    public void diSave() {
+        di.push(i);
     }
 
     //设置备份点为当前i
