@@ -17,11 +17,12 @@ public class CoreSolver extends AbstractSolver {
         AbstractSolver tail;
 
         void add(AbstractSolver solver) {
+            solver.setParent(CoreSolver.this);
             if (tail == null) {
                 head = tail = solver;
             } else {
-                tail.next = solver;
-                solver.prev = tail;
+                tail.setNext(solver);
+                solver.setPrev(tail);
                 tail = solver;
             }
         }
@@ -30,20 +31,18 @@ public class CoreSolver extends AbstractSolver {
             if (tail == null)
                 return null;
             AbstractSolver popNode = tail;
-            tail = tail.prev;
-            popNode.prev = null;
+            tail = tail.prev();
+            popNode.setPrev(null);
             if (tail != null)
-                tail.next = null;
+                tail.setNext(null);
             else
                 head = null;
             return popNode;
         }
 
-
         AbstractSolver peek() {
             return tail;
         }
-
     }
 
 

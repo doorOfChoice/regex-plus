@@ -24,7 +24,15 @@ public class Matcher {
         AbstractSolver t;
         CoreSolver r = root;
         while (mp.notEnd()) {
-            if (mp.cur().equals("|")) {
+            String ch = mp.cur();
+            if (ch.equals("(")) {
+                CoreSolver coreSolver = new CoreSolver();
+                coreSolver.setParent(r);
+                r.add(coreSolver);
+                r = coreSolver;
+            } else if (ch.equals(")")) {
+                r = r.parent();
+            } else if (ch.equals("|")) {
                 r.addOr();
             } else if ((t = getCountSolver(mp)) != null) {
                 r.add(t);

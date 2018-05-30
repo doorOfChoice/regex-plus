@@ -5,8 +5,8 @@ import regexp.MetaString;
 
 public class CountSolver extends AbstractSolver {
     private AbstractSolver solver;
-    private int min = -1;
-    private int max = -1;
+    private int min;
+    private int max;
     private boolean greedy = true;
 
     void setGreedy(boolean greedy) {
@@ -59,7 +59,7 @@ public class CountSolver extends AbstractSolver {
             if (count >= min) {
                 for (int j = i; j >= gi + min; --j) {
                     ms.i(j);
-                    if (super.solveAndNext(next, ms)) {
+                    if (super.solveAndNext(next(), ms)) {
                         return true;
                     }
                 }
@@ -72,7 +72,7 @@ public class CountSolver extends AbstractSolver {
             }
             int dec = max - min;
             do {
-                if (super.solveAndNext(next, ms)) {
+                if (super.solveAndNext(next(), ms)) {
                     return true;
                 }
                 if (!super.solve(solver, ms))
