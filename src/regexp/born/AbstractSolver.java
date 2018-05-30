@@ -8,7 +8,7 @@ import regexp.MetaString;
 public abstract class AbstractSolver implements Solver {
     private AbstractSolver prev;
     private AbstractSolver next;
-    private CoreSolver parent;
+    private AbstractSolver parent;
 
     public AbstractSolver() {
     }
@@ -19,11 +19,15 @@ public abstract class AbstractSolver implements Solver {
         return n == null ? null : n.next;
     }
 
+    protected AbstractSolver directNext() {
+        return next;
+    }
+
     protected AbstractSolver prev() {
         return prev;
     }
 
-    protected CoreSolver parent() {
+    protected AbstractSolver parent() {
         return parent;
     }
 

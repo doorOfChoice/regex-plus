@@ -17,7 +17,9 @@ public class CoreSolver extends AbstractSolver {
         AbstractSolver tail;
 
         void add(AbstractSolver solver) {
-            solver.setParent(CoreSolver.this);
+            if(parent() != null) {
+                solver.setParent(CoreSolver.this);
+            }
             if (tail == null) {
                 head = tail = solver;
             } else {
@@ -63,18 +65,29 @@ public class CoreSolver extends AbstractSolver {
     }
 
     public boolean solve(MetaString ms) {
+        Label:
         for (SolverList solverList : solverLists) {
-            if (solverList.head != null) {
-                if (super.solveAndNext(solverList.head, ms)) {
-                    return true;
+            AbstractSolver node = solverList.head;
+            while (node != null) {
+                if (!super.solve(node, ms)) {
+                    continue Label;
                 }
+                node = node.directNext();
             }
+            return true;
         }
         return false;
     }
 
     @Override
     public boolean solveAndNext(MetaString ms) {
-        return solve(ms);
+        for (SolverList solverList : solverLists) {
+            ms.diSave();
+            if (super.solveAndNext(solverList.head, ms)) {
+                return true;
+            }
+            ms.diRestore();
+        }
+        return false;
     }
 }

@@ -17,7 +17,7 @@ public class Matcher {
     public boolean match(String str) {
         MetaString ms = new MetaString(str);
         AbstractSolver solver = root;
-        return solver.solve(ms);
+        return solver.solveAndNext(ms);
     }
 
     private void analyzePattern(MetaPattern mp) {
@@ -31,14 +31,15 @@ public class Matcher {
                 r.add(coreSolver);
                 r = coreSolver;
             } else if (ch.equals(")")) {
-                r = r.parent();
+                r = (CoreSolver) r.parent();
             } else if (ch.equals("|")) {
                 r.addOr();
-            } else if ((t = getCountSolver(mp)) != null) {
+            } else if ((t = getCountSolver(mp, r)) != null) {
                 r.add(t);
             } else {
                 r.add(getSimpleSolver(mp.cur()));
             }
+
             mp.incr();
         }
     }
@@ -102,8 +103,7 @@ public class Matcher {
      * @param
      * @return
      */
-    private AbstractSolver getCountSolver(MetaPattern mp) {
-        CoreSolver r = root;
+    private AbstractSolver getCountSolver(MetaPattern mp, CoreSolver r) {
         AbstractSolver prev = r.peek();
         String cur = mp.cur();
         if (prev == null)
