@@ -83,7 +83,7 @@ public class MetaPattern implements Cloneable {
     }
 
     private boolean isSpecial(int v) {
-        return v >= 0 && v + 1 < s.length() && s.charAt(v) == '\\' && CharUtil.isSpecial(s.charAt(v + 1));
+        return v >= 0 && v + 1 < s.length() && s.charAt(v) == '\\' && isSpecial(s.charAt(v + 1));
     }
 
     private void checkEscape(String r) {
