@@ -93,9 +93,10 @@ public class DotSolver extends AbstractSolver {
         boolean satisfy(MetaPattern mp);
     
         /**
-         * 满足条件后返回的解析器
-         * @param mp 正则单词解析器
-         * @return 自定义解析器
+             * 满足条件后返回的解析器
+             * @param mp 正则单词解析器
+             * @param r 正则栈, 包含当前链中的已经生成的Solver        
+             * @return 自定义解析器
          */
         AbstractSolver gain(MetaPattern mp, CoreSolver r);
     }
