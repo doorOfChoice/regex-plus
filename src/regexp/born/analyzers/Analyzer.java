@@ -13,12 +13,12 @@ public interface Analyzer  {
      * @param mp 正则单词解析器
      * @return 是否满足条件
      */
-    boolean satisfy(MetaPattern mp, CoreSolver r);
+    boolean satisfy(MetaPattern mp);
 
     /**
      * 满足条件后返回的解析器
      * @param mp 正则单词解析器
      * @return 自定义解析器
      */
-    AbstractSolver gain(MetaPattern mp);
+    AbstractSolver gain(MetaPattern mp, CoreSolver r);
 }

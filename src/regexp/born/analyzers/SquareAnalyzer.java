@@ -9,12 +9,12 @@ import regexp.born.solvers.*;
  */
 public class SquareAnalyzer implements Analyzer {
     @Override
-    public boolean satisfy(MetaPattern mp, CoreSolver r) {
+    public boolean satisfy(MetaPattern mp) {
         return mp.notEnd() && mp.cur().equals("[");
     }
 
     @Override
-    public AbstractSolver gain(MetaPattern mp) {
+    public AbstractSolver gain(MetaPattern mp, CoreSolver r) {
         SquareSolver squareSolver = new SquareSolver();
         boolean isRange = false;
         String prev = null;

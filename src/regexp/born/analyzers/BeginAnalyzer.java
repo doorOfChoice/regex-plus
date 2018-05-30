@@ -7,12 +7,12 @@ import regexp.born.solvers.CoreSolver;
 
 public class BeginAnalyzer implements Analyzer {
     @Override
-    public boolean satisfy(MetaPattern mp, CoreSolver r) {
+    public boolean satisfy(MetaPattern mp) {
         return mp.notEnd() && mp.cur().equals("^");
     }
 
     @Override
-    public AbstractSolver gain(MetaPattern mp) {
+    public AbstractSolver gain(MetaPattern mp, CoreSolver r) {
         AbstractSolver solver = new BeginSolver();
         mp.incr();
         return solver;
