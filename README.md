@@ -33,10 +33,14 @@
 # 用法
 
 ```java
-    //匹配
-    boolean result = Regex.match("^(.*)1$", "hello world 1");
-    //匹配且分组
-    List<String> group = Regex.matchAndGroup("^<h1>(.*)</h1>$", "<h1>Hello Regex-Plus</h1>")
+       Pattern p = Pattern.compile("<div class=\"post-title\">(.+?)</div>");
+       Matcher m = p.matcher(str);
+       //获取所有分组 
+       while (m.find()) {
+           System.out.println(m.group());
+       }
+       //匹配
+       boolean ok = m.match();
 ```
 
 # 自定义表达式
