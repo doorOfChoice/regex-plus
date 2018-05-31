@@ -131,6 +131,5 @@ public class DotAnalyzer implements Analyzer {
 * 注册
 
 ```java
-    Matcher m = new Matcher("hello.*");
-    m.register(new DotRegister());
+   Pattern p = new Pattern("<h1>(.*)</h1>", new YourAnalyzer1(), new YourAnalyzer2(), new YourAnalyzer3())
 ```
