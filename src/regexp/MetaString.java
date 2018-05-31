@@ -12,6 +12,11 @@ public class MetaString {
         int min = 0;
         int max = 0;
 
+        public void clear() {
+            this.min = 0;
+            this.max = 0;
+        }
+
         @Override
         public String toString() {
             return "[" + min + "," + max + "]";
@@ -162,6 +167,16 @@ public class MetaString {
         this.i = di.peek();
     }
 
+    public void clear() {
+        i = 0;
+        di.clear();
+        for (Range range : ranges)
+            range.clear();
+    }
+
+    public int size() {
+        return s.length();
+    }
 
     public Object clone() {
         try {

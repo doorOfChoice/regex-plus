@@ -59,13 +59,8 @@ public abstract class AbstractSolver implements Solver {
      * @return
      */
     protected boolean solve(AbstractSolver solver, MetaString ms) {
-        if (solver == null)
-            return true;
-        if (solver.solve(ms)) {
-            setParentMaxRange(ms, ms.i());
-            return true;
-        }
-        return false;
+        setParentMaxRange(ms, ms.i());
+        return  solver == null ||solver.solve(ms);
     }
     /**
      * 解析对应solver并且递归解析，并且设置分组max下标
@@ -74,10 +69,8 @@ public abstract class AbstractSolver implements Solver {
      * @return
      */
     protected boolean solveAndNext(AbstractSolver solver, MetaString ms) {
-        if (solver == null)
-            return true;
         setParentMaxRange(ms, ms.i());
-        return solver.solveAndNext(ms);
+        return solver == null || solver.solveAndNext(ms);
     }
 
     /**
