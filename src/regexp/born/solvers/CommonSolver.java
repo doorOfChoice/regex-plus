@@ -20,11 +20,6 @@ public class CommonSolver extends AbstractSolver {
 
     @Override
     public boolean solveAndNext(MetaString ms) {
-        if (solve(ms)) {
-            boolean result = super.solveAndNext(next(), ms);
-            ms.decr();
-            return result;
-        }
-        return false;
+        return solve(ms) && super.solveAndNext(next(), ms);
     }
 }
