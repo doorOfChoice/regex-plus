@@ -1,5 +1,7 @@
 package regexp.born;
 
+import regexp.born.solvers.SpecialSolver;
+
 /**
  * 正则字符串的元数据库
  */
@@ -76,14 +78,11 @@ public class MetaPattern implements Cloneable {
 
 
     public boolean isSpecial() {
-        boolean result = isSpecial(i);
-        if (!result && s.charAt(i) == '\\')
-            throw new IllegalArgumentException("After \\ u need offer a special character");
-        return result;
+        return isSpecial(i);
     }
 
     private boolean isSpecial(int v) {
-        return v >= 0 && v + 1 < s.length() && s.charAt(v) == '\\' && isSpecial(s.charAt(v + 1));
+        return v >= 0 && v + 1 < s.length() && s.charAt(v) == '\\';
     }
 
     private void checkEscape(String r) {
