@@ -1,6 +1,5 @@
 package regexp.born;
 
-import regexp.MetaString;
 import regexp.born.solvers.CoreSolver;
 
 import java.util.List;

@@ -1,9 +1,6 @@
 package regexp.born;
 
-import regexp.MetaPattern;
-import regexp.MetaString;
 import regexp.born.analyzers.*;
-import regexp.born.solvers.AbstractSolver;
 import regexp.born.solvers.CoreSolver;
 
 import java.util.ArrayList;

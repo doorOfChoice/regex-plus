@@ -1,6 +1,6 @@
 package regexp.born.solvers;
 
-import regexp.MetaString;
+import regexp.born.MetaString;
 
 import java.util.ArrayList;
 import java.util.Arrays;

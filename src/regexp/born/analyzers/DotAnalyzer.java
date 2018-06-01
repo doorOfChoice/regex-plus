@@ -1,6 +1,6 @@
 package regexp.born.analyzers;
 
-import regexp.MetaPattern;
+import regexp.born.MetaPattern;
 import regexp.born.solvers.AbstractSolver;
 import regexp.born.solvers.CoreSolver;
 import regexp.born.solvers.DotSolver;

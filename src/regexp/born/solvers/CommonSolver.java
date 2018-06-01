@@ -1,6 +1,6 @@
 package regexp.born.solvers;
 
-import regexp.MetaString;
+import regexp.born.MetaString;
 
 public class CommonSolver extends AbstractSolver {
     private String ch;

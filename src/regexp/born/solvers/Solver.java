@@ -1,6 +1,6 @@
 package regexp.born.solvers;
 
-import regexp.MetaString;
+import regexp.born.MetaString;
 
 /**
  * Solver接口负责匹配正则字符和实际字符

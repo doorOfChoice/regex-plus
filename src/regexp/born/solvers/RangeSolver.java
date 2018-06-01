@@ -1,6 +1,6 @@
 package regexp.born.solvers;
 
-import regexp.MetaString;
+import regexp.born.MetaString;
 
 /**
  * 范围解析器

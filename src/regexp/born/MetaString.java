@@ -1,4 +1,4 @@
-package regexp;
+package regexp.born;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,7 @@ public class MetaString {
         this.s = s;
     }
 
-    public void buildRanges(int size) {
+    void buildRanges(int size) {
         for (int i = 0; i < size; ++i) {
             ranges.add(new Range());
         }
@@ -57,7 +57,7 @@ public class MetaString {
     }
 
     //获取分组得到的字符串
-    public List<String> getRangesString() {
+    List<String> getRangesString() {
         List<String> rs = new ArrayList<>();
         for (Range range : ranges) {
             rs.add(s(range.min, range.max));
@@ -128,10 +128,6 @@ public class MetaString {
         return s.substring(l, r);
     }
 
-    public String sDiToI() {
-        return s(di.peek(), i);
-    }
-
     //返回下标
     public int i() {
         return i;
@@ -167,14 +163,14 @@ public class MetaString {
         this.i = di.peek();
     }
 
-    public void clear() {
+    void clear() {
         i = 0;
         di.clear();
         for (Range range : ranges)
             range.clear();
     }
 
-    public int size() {
+    int size() {
         return s.length();
     }
 

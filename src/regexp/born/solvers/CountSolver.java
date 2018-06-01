@@ -1,7 +1,7 @@
 package regexp.born.solvers;
 
 
-import regexp.MetaString;
+import regexp.born.MetaString;
 
 public class CountSolver extends AbstractSolver {
     private AbstractSolver solver;

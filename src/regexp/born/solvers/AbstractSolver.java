@@ -1,6 +1,6 @@
 package regexp.born.solvers;
 
-import regexp.MetaString;
+import regexp.born.MetaString;
 
 /**
  * AbstractSolver提供抽象的方法供Solver的具体实现使用
