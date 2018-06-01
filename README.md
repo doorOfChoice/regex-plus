@@ -68,14 +68,7 @@ public class DotSolver extends AbstractSolver {
     //solveAndNext用于解析当前表达式之后, 解析下一个表达式
     @Override
     public boolean solveAndNext(MetaString ms) {
-        if (solve(ms)) {
-            //next()函数获取下一个节点
-            //super.solveAndNext用于解析下一个节点，并且返回结果
-            boolean result = super.solveAndNext(next(), ms);
-            ms.decr();
-            return result;
-        }
-        return false;
+        return solve(ms) && super.solveAndNext(next(), ms);
     }
 }
 
